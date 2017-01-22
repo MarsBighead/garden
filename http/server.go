@@ -17,8 +17,18 @@ func handler(w http.ResponseWriter, r *http.Request) {
         }
     }
 }
+func hello(w http.ResponseWriter, req *http.Request) {
+    w.Write([]byte("Hello"))
+}
+
+func say(w http.ResponseWriter, req *http.Request) {
+    w.Write([]byte("Hello"))
+}
 
 func main() {
     http.HandleFunc("/", handler)
+    http.HandleFunc("/hello", hello)
+ http.Handle("/handle",http.HandlerFunc(say));
     http.ListenAndServe(":8080", nil)
+    select{};
 }

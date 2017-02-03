@@ -28,7 +28,7 @@ func say(w http.ResponseWriter, req *http.Request) {
 func main() {
     http.HandleFunc("/", handler)
     http.HandleFunc("/hello", hello)
- http.Handle("/handle",http.HandlerFunc(say));
+    http.Handle("/handle",http.HandlerFunc(say));
     http.ListenAndServe(":8080", nil)
     select{};
 }

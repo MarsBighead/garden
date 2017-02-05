@@ -5,13 +5,18 @@ import (
     "strings"
     "strconv"
     "log"
+    "html/template"
+    "os"
     "sort"
     "net/http"
 )
-type statistics struct {
-    numbers [] float64
-    mean       float64
-    median     float64
+type Statistics struct {
+    Numbers [] float64
+    Count      int
+    Mean       float64
+    Median     float64
+    ErrMsg     string 
+    Get        bool
 }
 const (
     pageTop    = `<!DOCTYPE HTML><html><head>
@@ -29,6 +34,7 @@ const (
 
 func main() {
     http.HandleFunc("/", homePage)
+    http.HandleFunc("/t", testPage)
     if err :=http.ListenAndServe(":8080", nil); err!=nil {
         log.Fatal("Fail to start server localhost:8080", err)
     }
@@ -36,13 +42,38 @@ func main() {
     select{};
 
 }
-func homePage(writer http.ResponseWriter, request *http.Request) {
-    err := request.ParseForm() // Must be called before writing response
+func testPage(writer http.ResponseWriter, req *http.Request) {
+    templ, err := template.ParseFiles("template/index.htm")  
+    checkError(err) 
+    err = req.ParseForm() // Must be called before writing response
+    checkError(err) 
+    if req.Method == "GET" {  
+        err = templ.Execute(writer,"") 
+    } else if req.Method == "POST" { 
+        fmt.Printf("POST method verified is %s\n",req.Method)
+        if numbers, message, ok := processRequest(req); ok {
+            stats := getStats(numbers)
+            fmt.Printf("Calculate result is %v.\n",stats)
+            err = templ.Execute(writer, stats)
+        } else if message != "" {
+            fmt.Printf("Error msg is: %s.\n",message)
+            stats := Statistics{
+                 Get: false,
+                 ErrMsg: message,
+            }
+            err = templ.Execute(writer, stats)
+        }
+    }
+}
+func homePage(writer http.ResponseWriter, req *http.Request) {
+    fmt.Printf("homePage method is %s.\n",req.Method)
+    err := req.ParseForm() // Must be called before writing response
+    fmt.Printf("homePage form is %v.\n",req.ParseForm())
     fmt.Fprint(writer, pageTop, form)
     if err != nil {
         fmt.Fprintf(writer, anError, err)
     } else {
-        if numbers, message, ok := processRequest(request); ok {
+        if numbers, message, ok := processRequest(req); ok {
             stats := getStats(numbers)
             fmt.Fprint(writer, formatStats(stats))
         } else if message != "" {
@@ -64,27 +95,30 @@ func processRequest(request *http.Request) ([]float64, string, bool) {
             }
         }
     }
+    fmt.Printf("Numbers is %v.\n", numbers)
     if len(numbers) == 0 {
-        return numbers, "", false // no data first time form is shown
+        return numbers, "No data input!", false // no data first time form is shown
     }
     return numbers, "", true
 }
 
-func formatStats(stats statistics) string {
+func formatStats(stats Statistics) string {
     return fmt.Sprintf(`<table border="1">
 <tr><th colspan="2">Results</th></tr>
 <tr><td>Numbers</td><td>%v</td></tr>
 <tr><td>Count</td><td>%d</td></tr>
 <tr><td>Mean</td><td>%f</td></tr>
 <tr><td>Median</td><td>%f</td></tr>
-</table>`, stats.numbers, len(stats.numbers), stats.mean, stats.median)
+</table>`, stats.Numbers, len(stats.Numbers), stats.Mean, stats.Median)
 }
 
-func getStats(numbers [] float64) (stats statistics) {
-    stats.numbers = numbers
-    sort.Float64s(stats.numbers)
-    stats.mean = sum(numbers)/ float64(len(numbers))
-    stats.median = median(numbers)
+func getStats(numbers [] float64) (stats Statistics) {
+    stats.Numbers = numbers
+    stats.Count = len(numbers)
+    sort.Float64s(stats.Numbers)
+    stats.Mean = sum(numbers)/ float64(len(numbers))
+    stats.Median = median(numbers)
+    stats.Get = true
     return stats  
 }
 
@@ -107,3 +141,10 @@ func median(numbers [] float64) float64{
     return result
 }
 
+// checkError -Simplify error return checking  
+func checkError(err error) {  
+     if err != nil {  
+         fmt.Println("Fatal error ", err.Error())  
+      os.Exit(1)  
+     }
+}   

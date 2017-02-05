@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    <style>.error{color:#FF0000;}</style>
+    <title>Statistics</title>
+    </head>
+    <body><h3>Statistics</h3>
+    <p>Computes basic statistics for a given list of numbers</p>
+    <form action="localhoyts:8080/" method="POST">
+        <label for="numbers">Numbers (comma or space-separated):</label><br />
+        <input type="text" name="numbers" size="30"><br />
+        <input type="submit" value="Calculate">
+    </form>`
+    pageBottom = `</body></html>`
+    anError    = `<p class="error">%s</p>`
+
+
+func formatStats(stats statistics) string {
+    return fmt.Sprintf(`<table border="1">
+<tr><th colspan="2">Results</th></tr>
+<tr><td>Numbers</td><td>%v</td></tr>
+<tr><td>Count</td><td>%d</td></tr>
+<tr><td>Mean</td><td>%f</td></tr>
+<tr><td>Median</td><td>%f</td></tr>
+</table>`, stats.numbers, len(stats.numbers), stats.mean, stats.median)
+}
+
+
+

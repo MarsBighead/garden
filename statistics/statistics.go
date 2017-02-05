@@ -43,7 +43,7 @@ func main() {
 
 }
 func testPage(writer http.ResponseWriter, req *http.Request) {
-    templ, err := template.ParseFiles("template/index.htm")  
+    templ, err := template.ParseFiles("template/test.htm")  
     checkError(err) 
     err = req.ParseForm() // Must be called before writing response
     checkError(err) 

@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <style>.error{color:#FF0000;}</style>
+    <title>Test Statistics</title>
+</head>
+<body>
+    <h3>Test Statistics with Template</h3>
+    <p>Computes basic statistics for a given list of numbers</p>
+    <form action="/t" method="POST">
+        <label for="numbers">Numbers (comma or space-separated):</label><br />
+        <input type="text" name="numbers" size="30"><br />
+        <input type="submit" value="Calculate">
+    </form>
+    {{with .}}
+    <table border="1">
+       
+        <tr><th colspan="2">Results</th></tr>
+        {{if .Get}}
+        <tr><td>Numbers</td><td>{{.Numbers}}</td></tr>
+        <tr><td>Count</td><td>{{.Count}}</td></tr>
+        <tr><td>Mean</td><td>{{.Mean}}</td></tr>
+        <tr><td>Median</td><td>{{.Median}}</td></tr>
+        {{else}}
+        <tr><th colspan="2">{{.ErrMsg}}</th></tr>
+        {{end}}
+    </table>
+    {{end}}
+</body>
+</html>

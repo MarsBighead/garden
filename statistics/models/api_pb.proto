@@ -1,0 +1,21 @@
+syntax = "proto2";
+package models;
+
+enum FOO { X = 17; };
+
+message Test {
+  required string label = 1;
+  required int32 type = 2 [default=77];
+  repeated int64 reps = 3;
+  optional group OptionalGroup = 4 {
+    required string RequiredField = 5;
+  }
+}
+
+message Test2 {
+  required string label = 1;
+  repeated int64 reps = 3;
+  optional group OptionalGroup = 4 {
+    required string RequiredField = 5;
+  }
+}

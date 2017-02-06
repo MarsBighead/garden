@@ -9,6 +9,8 @@ import (
     "os"
     "sort"
     "net/http"
+
+    "garden/statistics/api"
 )
 type Statistics struct {
     Numbers [] float64
@@ -35,6 +37,7 @@ const (
 func main() {
     http.HandleFunc("/", homePage)
     http.HandleFunc("/t", testPage)
+    http.HandleFunc("/api/pb", apiPb)
     if err :=http.ListenAndServe(":8080", nil); err!=nil {
         log.Fatal("Fail to start server localhost:8080", err)
     }
@@ -64,6 +67,11 @@ func testPage(writer http.ResponseWriter, req *http.Request) {
             err = templ.Execute(writer, stats)
         }
     }
+}
+
+// apiPb  Provide api with protobuf
+func apiPb(writer http.ResponseWriter, req *http.Request) {
+     api.GetPb(writer) 
 }
 func homePage(writer http.ResponseWriter, req *http.Request) {
     fmt.Printf("homePage method is %s.\n",req.Method)

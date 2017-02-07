@@ -6,16 +6,16 @@ import (
     "net/http"
     "fmt"
 
-    "garden/statistics/apipb"
+    "garden/models"
     "github.com/golang/protobuf/proto"
 )
 
 func GetPb(writer http.ResponseWriter) {
-    test := &apipb.Test{
+    test := &models.Test{
         Label: proto.String("hello"),
         Type:  proto.Int32(18),
         Reps:  []int64{1, 2, 3},
-        Optionalgroup: &apipb.Test_OptionalGroup{
+        Optionalgroup: &models.Test_OptionalGroup{
             RequiredField: proto.String("good bye"),
         },
     }
@@ -23,18 +23,19 @@ func GetPb(writer http.ResponseWriter) {
     if err != nil {
         log.Fatal("marshaling error: ", err)
     }
-    fmt.Printf("protobuf marshal sample: %v\n", data)
-    newTest := &apipb.Test2{}
+    fmt.Printf("Data marshalled with protobuf:\n%v\n", data)
+    newTest := &models.Test2{}
     err = proto.Unmarshal(data, newTest)
     if err != nil {
         log.Fatal("unmarshaling error: ", err)
     }
     fmt.Fprintf(writer, string(data))
-    fmt.Printf("protobuf:\n%v, data: %v\n", newTest, data)
-    fmt.Printf("Output:\n%s,%d, %v\n", *newTest.Label, newTest.Reps, *newTest.Optionalgroup.RequiredField)
+    fmt.Printf("Unmashalled protobuf:\n%v,\nMarshalled data: %v\n", newTest, data)
+    fmt.Printf("Independent item out put:\n    Label:%s\n", *newTest.Label)
+    fmt.Printf("    Reps:%v\n", newTest.Reps)
+    fmt.Printf("    OptionalGroup:%v\n", *newTest.Optionalgroup.RequiredField)
     // Now test and newTest contain the same data.
     if test.GetLabel() != newTest.GetLabel() {
         log.Fatalf("data mismatch %q != %q", test.GetLabel(), newTest.GetLabel())
     }
-    // etc.
 }

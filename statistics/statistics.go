@@ -18,6 +18,7 @@ func main() {
     http.HandleFunc("/", cst.HomePage)
     http.HandleFunc("/t", testPage)
     http.HandleFunc("/api/pb", apiPb)
+    http.HandleFunc("/api/xdu", api.Xdu)
     if err :=http.ListenAndServe(":8080", nil); err!=nil {
         log.Fatal("Fail to start server localhost:8080", err)
     }

@@ -2,6 +2,7 @@ package inembed
 
 import (
 	"fmt"
+	"strings"
 	"unicode"
 )
 
@@ -42,6 +43,9 @@ func (p *StringPair) FixCase() {
 	p.First = fixCase(p.First)
 	p.Second = fixCase(p.Second)
 }
+func (p *Part) LowerCase() {
+	p.Name = strings.ToLower(p.Name)
+}
 
 func fixCase(s string) string {
 	var chars []rune
@@ -60,7 +64,7 @@ func fixCase(s string) string {
 
 func TR() {
 	toastRack := Part{8427, " TOAST RACK"}
-	toastRack.FixCase()
+	toastRack.LowerCase()
 	lobelia := StringPair{" LOBELIA", "SACKVILLE-BAGGINS"}
 	(&lobelia).FixCase()
 	fmt.Println(lobelia, toastRack)

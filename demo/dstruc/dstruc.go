@@ -70,6 +70,11 @@ func Union2() {
 func tranStruct(i interface{}) Author2 {
 	v := reflect.ValueOf(i)
 	fmt.Printf("Reflect test %v |\n", v)
+	if value, ok := i.(Author); ok {
+		fmt.Printf("Interface %v is struct Author2.\n", value)
+	} else {
+		fmt.Printf("Interface %v is not struct Author.\n", i)
+	}
 	val := i.(Author2)
 	return val
 }

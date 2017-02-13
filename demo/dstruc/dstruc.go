@@ -69,7 +69,9 @@ func Union2() {
 
 func tranStruct(i interface{}) Author2 {
 	v := reflect.ValueOf(i)
-	fmt.Printf("Reflect test %v |\n", v)
+	fmt.Printf("Elem of interface i is %v |\n", reflect.ValueOf(&v).Elem())
+	fmt.Printf("Kind of interface i is %v |\n", v.Kind())
+	fmt.Printf("Type of interface i is %v |\n", v.Type())
 	if value, ok := i.(Author); ok {
 		fmt.Printf("Interface %v is struct Author2.\n", value)
 	} else {

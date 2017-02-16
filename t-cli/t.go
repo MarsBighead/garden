@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"garden/models"
 	"io/ioutil"
 	"net/http"
-        "time"
-	"garden/models"
+	"time"
+
 	"github.com/golang/protobuf/proto"
 )
 
@@ -16,21 +17,21 @@ func Crawl(uri string) (*http.Response, error) {
 	//host, _ := os.Hostname()
 	//userAgent := "m" + "/3.0" + " (Appcoach, " + host + ")"
 	fmt.Printf("user url is :%s\n", uri)
-	// proxyURL, _ := url.Parse("http://proxy.appcoachs.net:7070")
 	client := &http.Client{
-	//	Transport: &http.Transport{
-	//		Proxy: http.ProxyURL(proxyURL),
-	//	},
 		Timeout: time.Duration(300 * time.Second),
 	}
 
-	//resp, err := client.Get(uri)
 	req, err := http.NewRequest("GET", uri, nil)
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/x-protobuffer")
 	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Printf("Http StatusCode: %d\n", resp.StatusCode)
 	return resp, nil
 }
 

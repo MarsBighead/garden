@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config version="1">
+<databases>
+  <dbType>mysql</dbType>
+  <dbName>dbsnp</dbName>
+  <dbUser>hbu</dbUser>
+  <password>Mars1234</password>
+</databases>
+</config>

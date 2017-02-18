@@ -42,10 +42,10 @@ func GetConfig() Config {
 	if err != nil {
 		fmt.Printf("error: %v", err)
 	}
-	fmt.Printf("Database type: %s\n", conf.DB[0].DBType)
-	fmt.Printf("Database name: %s\n", conf.DB[0].DBName)
-	fmt.Printf("Datase user: %s\n", conf.DB[0].DBUser)
-	fmt.Printf("Database password: %s\n", conf.DB[0].Password)
+	//fmt.Printf("Database type: %s\n", conf.DB[0].DBType)
+	//fmt.Printf("Database name: %s\n", conf.DB[0].DBName)
+	//fmt.Printf("Datase user: %s\n", conf.DB[0].DBUser)
+	//fmt.Printf("Database password: %s\n", conf.DB[0].Password)
 	return conf
 }
 

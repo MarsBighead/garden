@@ -3,8 +3,13 @@ package models
 import (
 	"database/sql"
 	"fmt"
+	"io"
+	"math/rand"
+	"strconv"
 
-	_ "github.com/go-sql-driver/mysql"
+	"bytes"
+
+	"github.com/go-sql-driver/mysql"
 )
 
 func GetRows(db *sql.DB) {
@@ -72,4 +77,24 @@ func TruncateTable(table string, db *sql.DB) {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
 	fmt.Printf("Truncate table chr successfully!\n")
+}
+
+// DumpLoad Truncate data in the table
+func DumpLoad(table string, db *sql.DB) {
+	var content string
+	for i := 11; i < 15; i++ {
+		str := fmt.Sprintf("%d\t%d\t%s\n", i, i*i, "xxxxx")
+		content += str
+	}
+	fmt.Printf("DumpLoad:\n%s\n", content)
+	//buf := bytes.NewBufferString(content)
+	readerName := "r" + strconv.Itoa(rand.Int())
+	mysql.RegisterReaderHandler(readerName, func() io.Reader { return bytes.NewBufferString(content) })
+	defer mysql.DeregisterReaderHandler(readerName)
+	cmd := "LOAD DATA LOCAL INFILE 'Reader::" + readerName + "' " +
+		"IGNORE INTO TABLE chr "
+	_, err := db.Exec(cmd)
+	if err != nil {
+		panic(err.Error())
+	}
 }

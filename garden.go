@@ -16,6 +16,7 @@ func main() {
 	defer db.Close()
 	models.TruncateTable("chr", db)
 	models.InsertVal(db)
+	models.DumpLoad("chr", db)
 	models.GetRows(db)
 	os.Exit(1)
 }

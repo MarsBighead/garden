@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"os"
 )
@@ -45,8 +46,8 @@ func main() {
 	http.HandleFunc("/t", tempHandler)
 	http.HandleFunc("/hello", testStatusNoContent)
 	http.Handle("/handle", http.HandlerFunc(say))
+	log.Printf("Server is running on http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
-	fmt.Printf("Server is running on http://localhost:8080")
 	select {}
 }
 

@@ -1,4 +1,4 @@
-package models
+package model
 
 import (
 	"database/sql"
@@ -12,6 +12,7 @@ import (
 	"github.com/go-sql-driver/mysql"
 )
 
+// GetRows Get query result
 func GetRows(db *sql.DB) {
 
 	// Prepare statement for reading data

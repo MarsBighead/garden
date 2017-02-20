@@ -1,5 +1,5 @@
 syntax = "proto2";
-package models;
+package model;
 
 enum FOO { X = 17; };
 

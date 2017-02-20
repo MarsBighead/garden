@@ -2,13 +2,13 @@
 // source: api_pb.proto
 // DO NOT EDIT!
 
-package models 
+package model
 
 import (
-       proto "github.com/golang/protobuf/proto"
-       json "encoding/json"
-       math "math"
-       )
+	json "encoding/json"
+	proto "github.com/golang/protobuf/proto"
+	math "math"
+)
 
 // Reference proto, json, and math imports to suppress error if they are not otherwise used.
 var _ = proto.Marshal

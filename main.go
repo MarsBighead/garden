@@ -1,9 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"garden/config"
 	"garden/model"
+	"io/ioutil"
+	"log"
+	"net/http"
 	"os"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -20,19 +25,10 @@ func main() {
 	model.GetRows(db)
 	os.Exit(1)
 }
-package main
-
-import (
-	"fmt"
-	"io/ioutil"
-	"log"
-	"net/http"
-	"strings"
-)
 
 func index(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()       //解析参数，默认是不会解析的
-	fmt.Println(r.Form) //这些信息是输出到服务器端的打印信息
+	r.ParseForm() //Parse parameters, default none
+	fmt.Println(r.Form)
 	fmt.Printf("User Agent: %v\n", r.Header.Get("User-Agent"))
 	// fmt.Println("scheme", r.URL.Scheme)
 	// fmt.Println(r.Form["url_long"])
@@ -55,7 +51,8 @@ func apiMatrix(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string(file)) //这个写入到w的是输出到客户端的
 }
 
-func main() {
+//Start an test server
+func Server() {
 	http.HandleFunc("/", index)
 	http.HandleFunc("/m/api/matrix", apiMatrix)
 	err := http.ListenAndServe(":8001", nil) //设置监听的端口

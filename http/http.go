@@ -2,26 +2,13 @@ package main
 
 import (
 	"fmt"
-	"html/template"
+	"garden/model"
 	"log"
 	"net/http"
 	"os"
 )
 
-type Person struct {
-	Name    string
-	Age     int
-	Emails  []string
-	Company string
-	Role    string
-}
-
-type OnlineUser struct {
-	User      []*Person
-	LoginTime string
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
+func testHeader(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hi there, I love %s!\n", r.URL.Path[1:])
 	fmt.Printf("Hi there, I love %v!\n", r.URL.Path[1:])
 	for k, v := range r.Header {
@@ -42,37 +29,14 @@ func say(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", handler)
-	http.HandleFunc("/t", tempHandler)
+	http.HandleFunc("/", model.HttpHome)
+	http.HandleFunc("/header", testHeader)
+	http.HandleFunc("/t", model.HttpTemp)
 	http.HandleFunc("/hello", testStatusNoContent)
 	http.Handle("/handle", http.HandlerFunc(say))
 	log.Printf("Server is running on http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
 	select {}
-}
-
-func tempHandler(w http.ResponseWriter, r *http.Request) {
-	dumx := Person{
-		Name:    "zoro",
-		Age:     27,
-		Emails:  []string{"dg@gmail.com", "dk@hotmail.com"},
-		Company: "Omron",
-		Role:    "SE"}
-
-	chxd := Person{
-		Name:   "chx",
-		Age:    26,
-		Emails: []string{"test@gmail.com", "d@hotmail.com"}}
-
-	onlineUser := OnlineUser{User: []*Person{&dumx, &chxd}}
-
-	//t := template.New("Person template")
-	//t, err := t.Parse(templ)
-	t, err := template.ParseFiles("template/t.htm")
-	checkError(err)
-
-	err = t.Execute(w, onlineUser)
-	checkError(err)
 }
 
 // checkError -Simplify error return checking

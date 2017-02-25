@@ -28,7 +28,10 @@ type Database struct {
 }
 
 func GetConfig() Config {
-	file, err := os.Open("config/config.xml") // For read access.
+	gardenBaseDir := os.Getenv("GARDEN")
+	configXML := gardenBaseDir + "config/config.xml"
+	file, err := os.Open(configXML) // For read access.
+
 	if err != nil {
 		fmt.Printf("error: %v", err)
 	}

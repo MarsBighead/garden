@@ -10,11 +10,18 @@ import (
 
 func GetMultiUri(strs []string) {
 	start := time.Now()
+	s := strs[:]
+	for i := 0; i < 10000; i++ {
+		fmt.Printf("Nums: %v\n", i)
+		s = append(s, strs[0], strs[1], strs[2])
+	}
+	fmt.Printf("New strs: %v\n", len(s))
+	//os.Exit(0)
 	ch := make(chan string)
-	for _, url := range strs {
+	for _, url := range s {
 		go fetch(url, ch) // start a goroutine
 	}
-	for range strs {
+	for range s {
 		fmt.Println(<-ch) // receive from channel ch
 	}
 	fmt.Printf("%.2fs elapsed\n", time.Since(start).Seconds())

@@ -1,0 +1,93 @@
+user {
+id: "bd98f6deb05f6256ca4028799fb42710"
+}
+site { 
+    id: 1
+    content {
+        title: "花千骨第 10 集"
+        url: "www.iqiyi.com"
+        keyword: "内地"
+        keyword: "言情剧"
+        keyword: "古装剧"
+        keyword: "偶像剧"
+        keyword: "地区"
+        keyword: "类型"
+        keyword: "配音语种"
+        keyword: "国语"
+        keyword: "剧情"
+        keyword: "题材"
+        keyword: "虐恋"
+        keyword: "师生恋"
+        keyword: "仙侠"
+        keyword: "网络小说改编" keyword: "内地剧场"
+        keyword: "华语剧场"
+        keyword: "最新更新"
+        keyword: "一周最热节目单" keyword: "高颜值开启返古狂潮" keyword: "内地"
+        keyword: "言情剧"
+        keyword: "古装剧"
+        keyword: "偶像剧"
+        keyword: "地区"
+        keyword: "类型"
+        keyword: "配音语种"
+        keyword: "国语"
+        keyword: "剧情"
+        keyword: "题材"
+        keyword: "虐恋"
+        keyword: "师生恋"
+        keyword: "仙侠"
+        keyword: "网络小说改编"
+        keyword: "内地剧场"
+        keyword: "华语剧场"
+        keyword: "最新更新"
+        keyword: "一周最热节目单"
+        keyword: "高颜值开启返古狂潮"
+        len: 2214
+        album_id: 202321601
+        channel_id: 2
+    } 
+}
+device {
+    ua: "WinHttpClient" 
+    ip: "10.1.243.163"
+    model: " iPhone9,1"
+    os: " android "
+    os_version: "5.1.1" 
+    geo {
+        country: 1
+        metro: 100
+        city: 10000
+    }
+    connection_type: 0
+    platform_id: 11
+    android_id: "879beada72645b29"
+}
+imp {
+    id: "17"
+    video {
+        ad_zone_id: 1000000000381
+        linearity: 1
+        minduration: 15
+        maxduration: 60
+        protocol: 3
+        startdelay: 5
+        ad_type: 1
+    }
+    bidfloor: 800 
+    floor_price:[
+        {
+        industry:400000000,
+        price:1200 
+        },
+        {
+        industry:100000000,
+        price:400 
+        },
+        
+        {
+        industry:200000000,
+        price:1000 
+        }
+    ]
+    campaign_id: 61000000
+    is_pmp:true 
+}

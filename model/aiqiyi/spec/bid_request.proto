@@ -1,0 +1,203 @@
+// This file is derived from the OpenRTB specification.
+
+package ads_serving.proto;
+
+message FloorPrice {
+    optional int64 industry = 1;
+    optional int32 price = 2;
+}
+
+message Banner {
+    // Ad zone identifier.
+    optional int64 ad_zone_id = 4;
+
+    // This field is always 0 now.
+    optional int32 ad_type = 12;
+}
+
+message Video {
+    // The iqiyi-internal unique identifier of an ad zone.
+    optional int64 ad_zone_id = 1;
+
+    // Indicates whether the ad impression is linear or non-linear.
+    // 1. Linear, example: pre-roll, mid-roll and post-roll.
+    // 2. Non-linear, example: overlay, video link, pause, and tool bar.
+    optional int32 linearity = 3;
+
+    // The detail description of the type of an advertisement. The value and
+    // corresponding meaning is as following: 1 pre-rool, 2 mid-roll, 3 post-roll,
+    // 4 corner, 5 video link, 6 pause, 7 tool bar, 9 overlay.
+    optional int32 ad_type = 13;
+
+    // The minimum ad duration(in seconds) allowed on this video ad zone.
+    optional int32 minduration = 4;
+
+    // The maximum ad duration(in seconds) allowed on this video ad zone.
+    optional int32 maxduration = 5;
+
+    // Video bid response protocols.
+    // 1 VAST 1.0
+    // 2 VAST 2.0
+    // 3 VAST 3.0
+    // 4 VAST 1.0 Wrapper
+    // 5 VAST 2.0 Wrapper
+    // 6 VAST 3.0 Wrapper
+    optional int32 protocol = 6;
+
+    // Width of the player in pixels.
+    optional int32 w = 7;
+
+    // Height of the player in pixels.
+    optional int32 h = 8;
+
+    // A zero-based offset seconds from the start of a roll-type ad. The value
+    // of this field is equal to M * 5 + N * 15, M = 0, 1 and N = 0, 1, 2, ...
+    optional int32 startdelay = 9;
+
+    // This field is meaningful only when this impression is linear. It indicates
+    // whether "maxduration" is equal to the total duration this impression holds.
+    // That's to say, the entire (pre/mid/post)-roll is available if it is true.
+    optional bool is_entire_roll = 14 [default = false];
+
+    // A zero-based offset seconds from the start of the video.
+    optional int32 video_startdelay = 15;
+}
+
+message Impression {
+    // The unique identifier of this impression within the context of the bid
+    // request.
+    optional string id = 1;
+
+    // An impression is either banner or video, but not both.
+    optional Banner banner = 2;
+    optional Video video = 3;
+
+    // The floor price list of this impression for all industries in
+    // RMB(cent per CPM).
+    repeated FloorPrice floor_price = 9;
+    // Refer to this field to get the floor price if an industry is not found in
+    // the "floor_price".
+    optional int32 bidfloor = 4 [default = 0];
+
+    // Campaign is a facility used by DSP to partition traffic.
+    optional int32 campaign_id = 5;
+
+    // The advertisements with these tags will be blocked on this impression.
+    // Ad tag can be understood as the product type in an ad.
+    repeated int32 blocked_ad_tag = 6;
+
+    repeated int32 blocked_ad_attribute = 7;
+
+    // This impression is a pmp one if this field is set to be true.
+    optional bool is_pmp = 8 [default = false];
+
+    extensions 100 to max;
+}
+
+message Site {
+    // The iqiyi-internal unique identifier of a site.
+    optional int32 id = 1;
+
+    optional Content content = 11;
+}
+
+message Content {
+    optional string title = 3;
+
+    // Original URL of the content, for buy-side contextualization or review.
+    optional string url = 6;
+
+    // The list of keywords describing the content.
+    repeated string keyword = 9;
+
+    // The duration of video content in seconds.
+    optional int32 len = 16;
+
+    // The iqiyi-internal unique identifier of an album.
+    optional int64 album_id = 20;
+
+    optional int64 channel_id = 22;
+}
+
+message Device {
+    // Browser user agent string.
+    optional string ua = 2;
+
+    // IPv4 address closest to device.
+    optional string ip = 3;
+
+    // Geography information derived from IP address.
+    optional Geo geo = 4;
+
+    // Return the detected connection type for the device.
+    // 0 Unknown
+    // 1 Ethernet
+    // 2 Wifi
+    // 3 Cellular data - 2G
+    // 4 Cellular data - 3G
+    // 5 Cellular data - 4G
+    optional int32 connection_type = 15;
+
+    // The iqiyi-internal unique identifier of a platform.
+    optional int32 platform_id = 18;
+
+    // The features supported by the iqiyi ua which the current bid request is
+    // from.
+    repeated int64 feature = 19;
+
+    optional string android_id = 20;
+
+    // The model for the device.
+    // example: iphone, vivoX7
+    optional string model = 21;
+
+    // The operating system for the device.
+    // example: ios, windows, android
+    optional string os = 22;
+
+    // The operating system version for the device.
+    // example: 5.1.1
+    optional string os_version = 23;
+}
+
+message Geo {
+    optional int32 country = 3;
+    optional int32 metro = 5;
+    optional int32 city = 6;
+}
+
+message User {
+    // The unique identifier of this user on the exchange.
+    // For IOS, this is IDFA or UDID. For Android, this is IMEI or MAC address.
+    optional string id = 1;
+
+    //This field will be set true if the privacy of the current user should be protected.
+    optional bool is_privacy_protected = 2 [default = false];
+}
+
+message BidRequest {
+    // Note, the value of this field is not unique.
+    optional string id = 1;
+
+    optional User user = 2;
+    optional Site site = 3;
+    optional Device device = 5;
+
+    // The list of impression objects. Multiple impression auctions may be
+    // specified in a single bid request. At least one impression is required
+    // for a valid bid request.
+    repeated Impression imp = 8;
+
+    // If true, then this is a test request. Results will not be displayed to
+    // users and DSP will not be billed for a response even if it wins the
+    // auction. DSP should still do regular processing since the request may be
+    // used to evaluate latencies or for other testing.
+    optional bool is_test = 9 [default = false];
+
+    // If true, then this request is intended to measure network latency. Please
+    // return an empty BidResponse with only processing_time_ms set as quickly as
+    // possible without executing any bidding logic.
+    optional bool is_ping = 10 [default = false];
+
+    extensions 100 to max;
+}

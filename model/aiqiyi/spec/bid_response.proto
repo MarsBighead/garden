@@ -1,0 +1,70 @@
+// This file is derived from the OpenRTB specification.
+
+package ads_serving.proto;
+
+// This message will be sent through the impression URL that is specified in the
+// VAST XML when an advertisement is displayed to user successfully.
+message Settlement {
+    // This filed can be used to dynamically determine the specific algorithm
+    // for generating the fields "price" and "auth". You don't need to care the
+    // value of this field until you are told to.
+    optional uint32 version = 1;
+
+    // Encrypted price.
+    required bytes price = 2;
+
+    // Authentication information for "price".
+    optional bytes auth = 3;
+}
+
+message Bid {
+    // ID for the bid object chosen by the bidder for tracking and debugging
+    // purposes. It is useful when multiple bids are submitted for a single
+    // impression for a given seat.
+    required string id = 1;
+
+    // ID of the impression object to which this bid applies.
+    required string impid = 2;
+
+    // The bidding price in RMB(cent per CPM).
+    required int32 price = 3;
+
+    // The VAST XML for describing the advertisement of this bid.
+    required string adm = 6;
+
+    // The id of the creative to be presented to viewers. This field should be
+    // populated with the "tvid" that is responded when the creative is uploaded.
+    required string crid = 10;
+
+    // If the startdelay of an impression object from BidRequest is X, then the
+    // valid value of this field is X + N * 15, N = 0, 1, 2, ...
+    // Note, if a DSP hopes to have more opportunity to gain an impression, this
+    // field should not be set.
+    optional int32 startdelay = 16;
+
+    // When a bid is returned according to user data such as age, interest,
+    // gender and so on, this field should be set to true.
+    optional bool is_precision_advertising = 17 [default = false];
+
+    extensions 100 to max;
+}
+
+message Seatbid {
+    // The list of bid objects. Each bid object should be related to an impression
+    // object in the bid request.
+    repeated Bid bid = 1;
+}
+
+message BidResponse {
+    // This id should be the same as the id of the corresponding BidRequest.
+    required string id = 1;
+
+    // The list of seatbid objects.
+    repeated Seatbid seatbid = 2;
+
+    // If BidRequest.is_ping is true, please set this filed with your processing
+    // time in milliseconds from receiving request to returning response.
+    optional int32 processing_time_ms = 4;
+
+    extensions 100 to max;
+}

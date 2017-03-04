@@ -5,20 +5,20 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
-	"encoding/hex"
 	"fmt"
 	"garden/model/aiqiyi"
 	"os"
 	"strings"
+	"encoding/hex"
+	"garden/model/aiqiyi"
 
 	"github.com/golang/protobuf/proto"
 )
 
-//  EncodeSettle Xiaodu-adx protobuf build
-func EncodeSettle(price []byte) {
-	encodedPrice := "40dd88e115aab34ffa949dfb245e8e97"
-	fmt.Printf("encodedPrice is %s.\n", encodedPrice)
-
+// EncryptSettle Xiaodu-adx protobuf build
+func EncryptSettle() {
+	//fmt.Printf("Aiqiyi msg settlement serialization\n")
+	price := aesPrice()
 	settle := &aiqiyi.Settlement{
 		Version: proto.Uint32(717171),
 		Price:   price,
@@ -26,49 +26,50 @@ func EncodeSettle(price []byte) {
 	// Marshal data mock aiqiyi settlement
 	pData, err := proto.Marshal(settle)
 	checkError(err)
-	//fmt.Printf("Marshal:\n%v\n", string(pData))
+	//fmt.Printf("Marshal:\n%v\n", pData)
 	settlement := encodeSettlement(string(pData))
-	fmt.Printf("settlement encoded by base64: %v\n", len(settlement))
+	fmt.Printf("settlement encoded by base64: %v\n", settlement)
 }
 
-func DecodeSettle() string {
-	settlement := "CPPiKxIQQN2I4RWqs0-6lJ37JF6Olw!!"
-	// settlement := "CPPiKxIQQN2I4RWqs0-6lJ37JF6OlyEh"
-	// fmt.Printf("37 Original settlement msg|%v\n", settlement)
+func DecryptSettle() {
+	//settlement := "CPPiKxIQQN2I4RWqs0-6lJ37JF6Olw!!"
+	settlement := "CPPiKxIQQN2I4RWqs0-6lJ37JF6OlyEh"
+	fmt.Printf("37 Original settlement msg|%v\n", settlement)
 	data := decodeSettlement(settlement)
 	usettle := &aiqiyi.Settlement{}
 
 	err := proto.Unmarshal(data, usettle)
 	checkError(err)
 	// hex: change data dimensionality
-	return hex.EncodeToString(usettle.Price)
+	fmt.Printf("Price  | %v\n", hex.EncodeToString(usettle.Price))
+	fmt.Printf("Auth   | %v\n", string(usettle.Auth))
 }
 
 //func encryptData(data string) ([]byte, error) {
-func decodeSettlement(settlement string) []byte {
+func decodeSettlement(encrypted string) []byte {
 	encoding := aiqiyiEncode()
-	fmt.Printf("lenth of settlement: %v\n", len(settlement))
-	var missing = (4 - len(settlement)%4) % 4
-	settlement += strings.Repeat("!", missing)
-	decoded, err := encoding.DecodeString(settlement)
-	checkError(err)
-	// end := len(decoded) - missing
-	// fmt.Printf("55 decodebase64 is: %v, missing: %v\n", len(decoded), missing)
-	// fmt.Printf("decodebase64 is: %v\n", decoded[0:end])
+	fmt.Printf("lenth of encrypted: %v\n", len(encrypted))
+	var missing = (4 - len(encrypted)%4) % 4
+	encrypted += strings.Repeat("!", missing)
+	decoded, err := encoding.DecodeString(encrypted)
+	check(err)
+	end := len(decoded) - missing
+	fmt.Printf("55 decodebase64 is: %v, missing: %v\n", len(decoded), missing)
+	fmt.Printf("decodebase64 is: %v\n", decoded[0:end])
 	//return decoded[0:end]
 	return decoded
 }
 
 //func encryptData(data string) ([]byte, error) {
-func encodeSettlement(settlement string) string {
+func encodeSettlement(decrypted string) string {
 	encoding := aiqiyiEncode()
-	var missing = (4 - len(settlement)%4) % 4
-	settlement += strings.Repeat("!", missing)
+	var missing = (4 - len(decrypted)%4) % 4
+	decrypted += strings.Repeat("!", missing)
 
-	src := []byte(settlement)
-	val := encoding.EncodeToString(src)
-	// fmt.Printf("settle.go 71 Length of encoded: %v\n", len(val))
-	return val
+	src := []byte(decrypted)
+	encoded := encoding.EncodeToString(src)
+	fmt.Printf("Length of encoded: %v\n", string(encoded))
+	return encoded
 }
 func aiqiyiEncode() *base64.Encoding {
 	dictoinary := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-"
@@ -85,15 +86,16 @@ func checkError(err error) {
 }
 
 func EncryptAESPrice() []byte {
+	encodedPrice := "40dd88e115aab34ffa949dfb245e8e97"
+	fmt.Printf("encodedPrice is %s.\n", encodedPrice)
 	price := "1234567890"
-	token := "46356afe55fa3cea9cbe73ad442cad47"
-	// transfer token to 128bit with method from hex package
-	key, _ := hex.DecodeString(token)
-	cryptedPrice := aesEncrypt(price, key)
-	// fmt.Println("base64 encoded cryptedPrice:", base64.StdEncoding.EncodeToString(cryptedPrice))
-	return cryptedPrice
+	key, _ := hex.DecodeString("46356afe55fa3cea9cbe73ad442cad47")
+	crypted := AesEncrypt(price, key)
+	fmt.Printf("ase price: %v\n", string(crypted))
+	fmt.Printf("ase price: %v\n", hex.EncodeToString(crypted))
+	return crypted
 }
-func aesEncrypt(src string, key []byte) []byte {
+func AesEncrypt(src string, key []byte) []byte {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		fmt.Println("key error1", err)
@@ -107,6 +109,7 @@ func aesEncrypt(src string, key []byte) []byte {
 	crypted := make([]byte, len(content))
 	ecb.CryptBlocks(crypted, content)
 	// 普通base64编码加密 区别于urlsafe base64
+	fmt.Println("base64 result:", base64.StdEncoding.EncodeToString(crypted))
 	return crypted
 }
 

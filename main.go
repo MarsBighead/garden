@@ -37,6 +37,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("val:", strings.Join(v, ""))
 	}
 	var content = "Hello!\n" + "<a href=\"\">matrix API</a>"
+
 	//w.Write([]byte("Hello<a href=\"\">matrix API</a>"))
 	fmt.Fprintf(w, content) //这个写入到w的是输出到客户端的
 }

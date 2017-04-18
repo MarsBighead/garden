@@ -11,13 +11,13 @@ import (
 func GetMultiUri(strs []string) {
 	start := time.Now()
 	s := strs[:]
-	for i := 0; i < 10000; i++ {
-		fmt.Printf("Nums: %v\n", i)
+	for i := 0; i < 500; i++ {
+		//fmt.Printf("Nums: %v\n", i)
 		s = append(s, strs[0], strs[1], strs[2])
 	}
 	fmt.Printf("New strs: %v\n", len(s))
 	//os.Exit(0)
-	ch := make(chan string)
+	ch := make(chan string, 4)
 	for _, url := range s {
 		go fetch(url, ch) // start a goroutine
 	}

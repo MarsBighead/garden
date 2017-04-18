@@ -1,26 +1,14 @@
-package concurrence
+package main
 
 import (
 	"fmt"
-	"log"
-	"os"
 	"path/filepath"
-	"regexp"
 	"runtime"
 	"strings"
 )
 
 func main() {
-	runtime.GOMAXPROCS(runtime.NumCPU())
-	if len(os.Args) < 3 || os.Args[1] == "-h" || os.Args[1] == "--help" {
-		fmt.Printf("usage:%s<regexp> <files>\n", filepath.Base(os.Args[0]))
-		os.Exit(1)
-	}
-	if lineRx, err := regexp.Compile(os.Args[1]); err != nil {
-		log.Fatal("invalid regexp:%s\n", err)
-	} else {
-		grep(lineRx, commandLineFiles(os.Args[2:]))
-	}
+	fmt.Printf("%v.\n", runtime.NumCPU())
 }
 
 func source(files []string) <-chan string {

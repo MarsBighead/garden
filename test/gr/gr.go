@@ -8,7 +8,7 @@ import (
 
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
-	c := make(chan bool, 10)
+	c := make(chan bool, 100000)
 	t := time.Tick(time.Second)
 
 	go func() {

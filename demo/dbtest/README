@@ -1,0 +1,64 @@
+1. Export the backup data
+    -- mysqldump -u 'hbu' -p dbsnp chr> chr.sql
+2. Import the backup data
+    mysql> show tables;
+    Empty set (0.00 sec)
+    
+    mysql> source /home/hbu/go/src/garden/demo/dbtest/chr.sql
+    Query OK, 0 rows affected (0.03 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected, 1 warning (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.04 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 9 rows affected (0.00 sec)
+    Records: 9  Duplicates: 0  Warnings: 0
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected, 1 warning (0.01 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+    
+    Query OK, 0 rows affected (0.00 sec)
+

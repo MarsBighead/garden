@@ -1,0 +1,6 @@
+# toml configure
+application = "garden"
+
+# databases
+[databases]
+mysql = "hbu:Mars1234@(127.0.0.1:3306)/dbsnp"

@@ -1,6 +1,7 @@
 syntax = "proto2";
-package model;
+package pbt;
 
+// Test protobuf format with .proto file 
 enum FOO { X = 17; };
 
 message Test {

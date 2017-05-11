@@ -1,17 +1,17 @@
-package dstruc
+package structures
 
 import (
 	"fmt"
 	"reflect"
 )
 
-func u1() {
-	points := [][2]int{{4, 6}, {}, {-7, 11}, {15, 17}, {14, -8}}
-	for _, point := range points {
+func dataListVsStruct() {
+	pointBaseList := [][2]int{{4, 6}, {}, {-7, 11}, {15, 17}, {14, -8}}
+	for _, point := range pointBaseList {
 		fmt.Printf(" (%d %d)\n", point[0], point[1])
 	}
-	points2 := []struct{ x, y int }{{4, 6}, {}, {-7, 11}, {15, 17}, {14, -8}}
-	for _, point := range points2 {
+	pointBaseStruct := []struct{ x, y int }{{4, 6}, {}, {-7, 11}, {15, 17}, {14, -8}}
+	for _, point := range pointBaseStruct {
 		fmt.Printf(" (x, y) is (%d %d)\n", point.x, point.y)
 	}
 }
@@ -49,7 +49,7 @@ type Author2 struct {
 	Yob   int
 }
 
-func Union2() {
+func MixedUnion() {
 
 	author2 := Author2{
 		Person{" Mr ", []string{"Robert", " Louis", " Balfour"}, "Stevenson"},
@@ -62,16 +62,16 @@ func Union2() {
 	author2.Surename = " Wilde "
 	author2.Yob += 4
 	fmt.Println(author2)
-	tstruct := tranStruct(author2)
-	fmt.Println("Author1 ", tstruct.Surename)
+	ts := transferStruct(author2)
+	fmt.Println("Author1 ", ts.Surename)
 
 }
 
-func tranStruct(i interface{}) Author2 {
+func transferStruct(i interface{}) Author2 {
 	v := reflect.ValueOf(i)
-	fmt.Printf("Elem of interface i is %v |\n", reflect.ValueOf(&v).Elem())
-	fmt.Printf("Kind of interface i is %v |\n", v.Kind())
-	fmt.Printf("Type of interface i is %v |\n", v.Type())
+	fmt.Printf("Elem of interface i is %v\n", reflect.ValueOf(&v).Elem())
+	fmt.Printf("Kind of interface i is %v\n", v.Kind())
+	fmt.Printf("Type of interface i is %v\n", v.Type())
 	if value, ok := i.(Author); ok {
 		fmt.Printf("Interface %v is struct Author2.\n", value)
 	} else {
@@ -89,5 +89,4 @@ type Count struct{ X int }
 
 func (tasks *Tasks) Add(task string) {
 	tasks.slice = append(tasks.slice, task)
-
 }

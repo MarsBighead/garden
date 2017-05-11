@@ -3,27 +3,41 @@ package main
 import (
 	"fmt"
 	"garden/config"
-	"garden/model"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
+type Service struct {
+}
+
 func main() {
-	db, err := config.GetDBConfig()
+	dir, err := currentDirectory()
+	if err != nil {
+		log.Fatal(err)
+	}
+	db, err := config.GetDB(*dir)
 	if err != nil {
 		panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
 	}
 	defer db.Close()
-	model.TruncateTable("chr", db)
-	model.InsertVal(db)
-	model.DumpLoad("chr", db)
-	model.GetRows(db)
-	os.Exit(1)
+	Server()
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatal("Fail to start server localhost:8080", err)
+	}
+	fmt.Printf("Server is running on http://localhost:8080")
+	select {}
+
+	/*	model.TruncateTable("chr", db)
+		model.InsertVal(db)
+		model.DumpLoad("chr", db)
+		model.GetRows(db)
+		os.Exit(1)*/
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
@@ -42,24 +56,32 @@ func index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, content) //这个写入到w的是输出到客户端的
 }
 
-func apiMatrix(w http.ResponseWriter, r *http.Request) {
-	userFile := "mock.json"
-	file, err := ioutil.ReadFile(userFile)
-	fmt.Printf("User Agent: %v\n", r.Header.Get("User-Agent"))
-	// fmt.Printf("Open file in func hello!\n")
-	check(err)
-	//fmt.Print(string(file))
-	fmt.Fprintf(w, string(file)) //这个写入到w的是输出到客户端的
+func jsonAPI(w http.ResponseWriter, r *http.Request) {
+	jsonFile := "data/mock.json"
+	body, err := ioutil.ReadFile(jsonFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.Write(body)
 }
 
 //Start an test server
 func Server() {
-	http.HandleFunc("/", index)
-	http.HandleFunc("/m/api/matrix", apiMatrix)
+	//http.HandleFunc("/", index)
+	route()
+	http.HandleFunc("/json", jsonAPI)
 	err := http.ListenAndServe(":8001", nil) //设置监听的端口
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
+}
+
+func currentDirectory() (*string, error) {
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		return nil, err
+	}
+	return &dir, nil
 }
 
 func check(e error) {

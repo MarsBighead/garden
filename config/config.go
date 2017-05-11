@@ -27,9 +27,8 @@ type Database struct {
 	Password string   `xml:"password"`
 }
 
-func GetConfig() Config {
-	gardenBaseDir := os.Getenv("GARDEN")
-	configXML := gardenBaseDir + "config/config.xml"
+func GetConfig(dir string) Config {
+	configXML := dir + "/config/config.xml"
 	file, err := os.Open(configXML) // For read access.
 
 	if err != nil {
@@ -45,15 +44,11 @@ func GetConfig() Config {
 	if err != nil {
 		fmt.Printf("error: %v", err)
 	}
-	//fmt.Printf("Database type: %s\n", conf.DB[0].DBType)
-	//fmt.Printf("Database name: %s\n", conf.DB[0].DBName)
-	//fmt.Printf("Datase user: %s\n", conf.DB[0].DBUser)
-	//fmt.Printf("Database password: %s\n", conf.DB[0].Password)
 	return conf
 }
 
-func GetDBConfig() (*sql.DB, error) {
-	conf := GetConfig().DB[0]
+func GetDB(dir string) (*sql.DB, error) {
+	conf := GetConfig(dir).DB[0]
 	dbType, dbUser, dbName, Password := conf.DBType, conf.DBUser, conf.DBName, conf.Password
 
 	db, err := sql.Open(dbType, dbUser+":"+Password+"@/"+dbName)

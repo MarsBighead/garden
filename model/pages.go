@@ -2,10 +2,12 @@ package model
 
 import (
 	"html/template"
+	"log"
 	"net/http"
 )
 
-func HttpHome(w http.ResponseWriter, r *http.Request) {
+// Home  home/index web page
+func Home(w http.ResponseWriter, r *http.Request) {
 	dumx := Person{
 		Name:    "zoro",
 		Age:     27,
@@ -20,12 +22,13 @@ func HttpHome(w http.ResponseWriter, r *http.Request) {
 
 	onlineUser := OnlineUser{User: []*Person{&dumx, &chxd}}
 
-	//t := template.New("Person template")
-	//t, err := t.Parse(templ)
+	log.Print("Running http handle modle.Home!")
 	t, err := template.ParseFiles(FormatPath("/template/home.htm"))
-
-	checkError(err)
-
+	if err != nil {
+		log.Fatal(err)
+	}
 	err = t.Execute(w, onlineUser)
-	checkError(err)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

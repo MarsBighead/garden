@@ -5,7 +5,7 @@ go build
 echo "End build garden..."
 echo "Start write environment variables..."
 pwd
-ls env.gd
+ls garden.source 
 `source env.gd`
 echo "Start garden..."
 ./garden &

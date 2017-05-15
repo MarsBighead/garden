@@ -7,6 +7,7 @@ import (
 
 func route() {
 	http.HandleFunc("/home", model.Home)
+	http.HandleFunc("/list", model.HomeList)
 	http.HandleFunc("/pbt", model.Pbt)
 	http.HandleFunc("/reproto", model.RebuildPbt)
 	http.HandleFunc("/api/xiaodu", model.FromXiaodu)

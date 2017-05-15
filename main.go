@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"garden/config"
-	"garden/model"
 	"log"
 	"net/http"
 	"os"
@@ -26,24 +25,22 @@ func main() {
 	}
 	defer db.Close()
 	fmt.Printf("db right or not?\n")
-	Server()
+	route()
+	err = http.ListenAndServe(":8001", nil) //设置监听的端口
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
+	log.Printf("Running Server on http://localhost:8001")
 	select {}
+}
 
+//Databases Start an test server
+func Databases() {
 	/*	model.TruncateTable("chr", db)
 		model.InsertVal(db)
 		model.DumpLoad("chr", db)
 		model.GetRows(db)
 		os.Exit(1)*/
-}
-
-//Server Start an test server
-func Server() {
-	route()
-	http.HandleFunc("/list", model.HomeList)
-	err := http.ListenAndServe(":8001", nil) //设置监听的端口
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
 }
 
 func currentDirectory() (*string, error) {

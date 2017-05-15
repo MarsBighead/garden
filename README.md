@@ -1,5 +1,5 @@
 # Garden
-- Golang practic
+- Golang practice
   * Golang applcication runs in web method.
 
 - Manual

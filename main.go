@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -35,22 +34,6 @@ func main() {
 		model.DumpLoad("chr", db)
 		model.GetRows(db)
 		os.Exit(1)*/
-}
-
-func index(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm() //Parse parameters, default none
-	fmt.Println(r.Form)
-	fmt.Printf("User Agent: %v\n", r.Header.Get("User-Agent"))
-	// fmt.Println("scheme", r.URL.Scheme)
-	// fmt.Println(r.Form["url_long"])
-	for k, v := range r.Form {
-		fmt.Println("key:", k)
-		fmt.Println("val:", strings.Join(v, ""))
-	}
-	var content = "Hello!\n" + "<a href=\"\">matrix API</a>"
-
-	//w.Write([]byte("Hello<a href=\"\">matrix API</a>"))
-	fmt.Fprintf(w, content) //这个写入到w的是输出到客户端的
 }
 
 //Server Start an test server

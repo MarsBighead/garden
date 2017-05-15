@@ -6,6 +6,14 @@ import (
 	"net/http"
 )
 
+func HomeList(w http.ResponseWriter, r *http.Request) {
+	t, err := template.ParseFiles(GetCurrentDir() + "/template/list.htm")
+	if err != nil {
+		log.Fatal(err)
+	}
+	t.Execute(w, nil)
+}
+
 // Home  home/index web page
 func Home(w http.ResponseWriter, r *http.Request) {
 	dumx := Person{
@@ -23,7 +31,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	onlineUser := OnlineUser{User: []*Person{&dumx, &chxd}}
 
 	log.Print("Running http handle modle.Home!")
-	t, err := template.ParseFiles(FormatPath("/template/home.htm"))
+	t, err := template.ParseFiles(GetCurrentDir() + "/template/home.htm")
 	if err != nil {
 		log.Fatal(err)
 	}

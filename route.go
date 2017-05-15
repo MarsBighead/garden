@@ -7,5 +7,7 @@ import (
 
 func route() {
 	http.HandleFunc("/", model.Home)
-	//http.HandleFunc("/t", model.Test)
+	http.HandleFunc("/home", model.Home)
+	http.HandleFunc("/json", model.ProtocolJSON)
+	http.HandleFunc("/test/protocol", model.Home)
 }

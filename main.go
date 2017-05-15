@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"garden/config"
-	"io/ioutil"
+	"garden/model"
 	"log"
 	"net/http"
 	"os"
@@ -26,11 +26,8 @@ func main() {
 		panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
 	}
 	defer db.Close()
+	fmt.Printf("db right or not?\n")
 	Server()
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		log.Fatal("Fail to start server localhost:8080", err)
-	}
-	fmt.Printf("Server is running on http://localhost:8080")
 	select {}
 
 	/*	model.TruncateTable("chr", db)
@@ -56,20 +53,10 @@ func index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, content) //这个写入到w的是输出到客户端的
 }
 
-func jsonAPI(w http.ResponseWriter, r *http.Request) {
-	jsonFile := "data/mock.json"
-	body, err := ioutil.ReadFile(jsonFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-	w.Write(body)
-}
-
-//Start an test server
+//Server Start an test server
 func Server() {
-	//http.HandleFunc("/", index)
 	route()
-	http.HandleFunc("/json", jsonAPI)
+	http.HandleFunc("/list", model.HomeList)
 	err := http.ListenAndServe(":8001", nil) //设置监听的端口
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
@@ -82,10 +69,4 @@ func currentDirectory() (*string, error) {
 		return nil, err
 	}
 	return &dir, nil
-}
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
 }

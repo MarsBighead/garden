@@ -2,16 +2,17 @@ package api
 
 import (
 	"fmt"
-	"garden/model"
+	"garden/marble/pbt"
 	"log"
 
 	"github.com/golang/protobuf/proto"
 )
 
 func GetPb() []byte {
+
 	data := getBufPb()
 	fmt.Printf("Byte data by protobuf:\n%v\n", data)
-	newTest := &model.Test{}
+	newTest := &pbt.Test{}
 	setPbFromBuf(data, newTest)
 	//fmt.Fprintf(w, string(data))
 
@@ -23,11 +24,11 @@ func GetPb() []byte {
 }
 
 func getBufPb() []byte {
-	test := &model.Test{
+	test := &pbt.Test{
 		Label: proto.String("hello"),
 		Type:  proto.Int32(18),
 		Reps:  []int64{1, 2, 3},
-		Optionalgroup: &model.Test_OptionalGroup{
+		Optionalgroup: &pbt.Test_OptionalGroup{
 			RequiredField: proto.String("good bye"),
 		},
 	}
@@ -38,7 +39,7 @@ func getBufPb() []byte {
 	return bufData
 }
 
-func setPbFromBuf(data []byte, t *model.Test) {
+func setPbFromBuf(data []byte, t *pbt.Test) {
 	err := proto.Unmarshal(data, t)
 	if err != nil {
 		log.Fatal("unmarshaling error: ", err)

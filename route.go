@@ -8,7 +8,9 @@ import (
 func route() {
 	http.HandleFunc("/home", model.Home)
 	http.HandleFunc("/json", model.ProtocolJSON)
+	http.HandleFunc("/statistic", model.HomeStatistic)
+	http.HandleFunc("/statistics", model.AdvancedStatistic)
 	http.HandleFunc("/test/protocol", model.ProtocalHTTP)
 	http.HandleFunc("/tpl", model.HomeTemplate)
-	// http.HandleFunc("/", model.Home)
+	http.HandleFunc("/", model.Home)
 }

@@ -4,9 +4,11 @@
 
 package pbt
 
-import proto "code.google.com/p/goprotobuf/proto"
-import json "encoding/json"
-import math "math"
+import (
+	json "encoding/json"
+	proto "github.com/golang/protobuf/proto"
+	math "math"
+)
 
 // Reference proto, json, and math imports to suppress error if they are not otherwise used.
 var _ = proto.Marshal

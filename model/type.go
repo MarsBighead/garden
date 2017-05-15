@@ -14,3 +14,13 @@ type OnlineUser struct {
 	User      []*Person
 	LoginTime string
 }
+
+// Statistic struct for handler statistic
+type Statistic struct {
+	Numbers []float64
+	Count   int
+	Mean    float64
+	Median  float64
+	ErrMsg  string
+	Get     bool
+}

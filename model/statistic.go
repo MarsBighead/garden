@@ -24,6 +24,7 @@ const (
 	anError    = `<p class="error">%s</p>`
 )
 
+// AdvancedStatistic Advanced statistic with template http page
 func AdvancedStatistic(writer http.ResponseWriter, req *http.Request) {
 	fmt.Printf("POST method is %s\n", req.Method)
 	tpl, err := template.ParseFiles(GetCurrentDir() + "/template/statistics.htm")
@@ -48,6 +49,7 @@ func AdvancedStatistic(writer http.ResponseWriter, req *http.Request) {
 	}
 }
 
+// HomeStatistic Statistic number
 func HomeStatistic(writer http.ResponseWriter, req *http.Request) {
 	fmt.Printf("HomePage handler from controller\n")
 	fmt.Printf("HTTP Method: %s.\n", req.Method)

@@ -15,7 +15,7 @@ type OnlineUser struct {
 	LoginTime string
 }
 
-// Statistics statitic struct for handler statistics
+// Statistic struct for handler statistic
 type Statistic struct {
 	Numbers []float64
 	Count   int

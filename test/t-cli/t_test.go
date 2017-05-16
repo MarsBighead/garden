@@ -1,13 +1,12 @@
 package client
 
-import "testing"
-import "fmt"
+import (
+	"fmt"
+	"testing"
+)
 
-func TestClient(t *testing.T) {
-	// Notice that it is whole difference between
-	// http://127.0.0.1:8001/api/pb and 127.0.0.1:8001/api/pb
-	//resp, _ := Crawl("http://127.0.0.1:8080/api/pb")
-	resp, _ := Crawl("http://127.0.0.1:8080/hello")
-	fmt.Printf("Response status: %v\n", resp.Status)
-	//ReadResponse(resp)
+//TestCrowl Test crawl protobuf test example
+func TestCrawl(t *testing.T) {
+	resp, _ := Crawl("http://127.0.0.1:8001/pbt")
+	fmt.Printf("Status: %v\n", resp.StatusCode)
 }

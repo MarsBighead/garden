@@ -1,26 +1,23 @@
 package client
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
-	"garden/models"
+	"garden/marble/pbt"
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	"log"
 
 	"github.com/golang/protobuf/proto"
 )
 
 // Crawl Send http request and get response data
 func Crawl(uri string) (*http.Response, error) {
-	//host, _ := os.Hostname()
-	//userAgent := "m" + "/3.0" + " (Appcoach, " + host + ")"
-	fmt.Printf("user url is :%s\n", uri)
 	client := &http.Client{
 		Timeout: time.Duration(300 * time.Second),
 	}
-
 	req, err := http.NewRequest("GET", uri, nil)
 	if err != nil {
 		return nil, err
@@ -31,13 +28,17 @@ func Crawl(uri string) (*http.Response, error) {
 		return nil, err
 	}
 
+	body, err := ReadResponse(resp)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%v\n", string(body))
 	fmt.Printf("Http StatusCode: %d\n", resp.StatusCode)
 	return resp, nil
 }
 
 // ReadResponse Get body data from http response
 func ReadResponse(resp *http.Response) ([]byte, error) {
-	fmt.Printf("Read values!\n")
 	if resp == nil {
 		return nil, errors.New("response is nil")
 	}
@@ -46,14 +47,13 @@ func ReadResponse(resp *http.Response) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("Body values: %v\n", body)
-	newTest := &models.Test{}
-	err = proto.Unmarshal(body, newTest)
-	fmt.Printf("Unmarshall protobuf data is:\n%v\n", newTest)
-	body = bytes.Replace(body, []byte("\x00"), []byte("\x20"), -1)
-	fmt.Printf("Protobuf data with blank/special charater replaced is:\n%v\n", newTest)
+	pbt := new(pbt.Test)
+	err = proto.Unmarshal(body, pbt)
+	fmt.Printf("Protobuf  test case: %#v\n", pbt)
+	// body = bytes.Replace(body, []byte("\x00"), []byte("\x20"), -1)
+	// fmt.Printf("Blank/special replaced: %#v\n", pbt)
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("StatusCode: %v, %s", resp.StatusCode, string(body))
+		return nil, fmt.Errorf("StatusCode error: %d", resp.StatusCode)
 	}
 	return body, nil
 }

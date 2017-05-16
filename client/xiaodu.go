@@ -10,17 +10,15 @@ import (
 
 	"fmt"
 
-	
-	"garden/internal/xiaodu"
+	"garden/marble/xiaodu"
+
 	"github.com/golang/protobuf/proto"
 )
 
-
-//MockPbRequest Mock a request with protobuf data
-func MockXduRequest(inputPb, uri string) {
+//XiaoduRequest Mock a request with protobuf data
+func XiaoduRequest(inputPb, uri string) {
 	pbData, err := ioutil.ReadFile(inputPb)
 	checkError(err)
-	//fmt.Printf("protobuf byte:\n%v\n", pbData)
 	body := &xiaodu.BidRequest{}
 	err = proto.Unmarshal(pbData, body)
 	checkError(err)
@@ -41,9 +39,9 @@ func MockXduRequest(inputPb, uri string) {
 	data := &xiaodu.BidRequest_Device{}
 	err = proto.Unmarshal(buf, data)
 	fmt.Printf("%v", string(buf))
-	jOut,err := os.Create("resp.bin")
+	jOut, err := os.Create("response.bin")
 	jOut.Write(buf)
-   	jOut.Close()
+	jOut.Close()
 }
 
 // checkError -Simplify error return checking

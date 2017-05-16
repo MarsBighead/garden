@@ -35,7 +35,7 @@ func AdvancedStatistic(writer http.ResponseWriter, req *http.Request) {
 		err = tpl.Execute(writer, "")
 	} else if req.Method == "POST" {
 		if numbers, message, ok := ProcessRequest(req); ok {
-			stats := GetStats(numbers)
+			stats := getStatistic(numbers)
 			fmt.Printf("Calculate result is %v.\n", stats)
 			err = tpl.Execute(writer, stats)
 		} else if message != "" {
@@ -60,7 +60,7 @@ func HomeStatistic(writer http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(writer, anError, err)
 	} else {
 		if numbers, message, ok := ProcessRequest(req); ok {
-			stats := GetStats(numbers)
+			stats := getStatistic(numbers)
 			fmt.Fprint(writer, formatStats(stats))
 		} else if message != "" {
 			fmt.Fprintf(writer, anError, message)
@@ -69,16 +69,17 @@ func HomeStatistic(writer http.ResponseWriter, req *http.Request) {
 	fmt.Fprint(writer, pageBottom)
 }
 
+// ProcessRequest  Management request from client
 func ProcessRequest(request *http.Request) ([]float64, string, bool) {
 	var numbers []float64
 	if slice, found := request.Form["numbers"]; found && len(slice) > 0 {
 		text := strings.Replace(slice[0], ",", " ", -1)
 		for _, field := range strings.Fields(text) {
-			if x, err := strconv.ParseFloat(field, 64); err != nil {
+			n, err := strconv.ParseFloat(field, 64)
+			if err != nil {
 				return numbers, "'" + field + "' is invalid", false
-			} else {
-				numbers = append(numbers, x)
 			}
+			numbers = append(numbers, n)
 		}
 	}
 	fmt.Printf("Get numbers %v in controller.\n", numbers)
@@ -98,7 +99,8 @@ func formatStats(stats Statistic) string {
         </table>`, stats.Numbers, len(stats.Numbers), stats.Mean, stats.Median)
 }
 
-func GetStats(numbers []float64) (stats Statistic) {
+// getStatistic Get statistic result
+func getStatistic(numbers []float64) (stats Statistic) {
 	stats.Numbers = numbers
 	stats.Count = len(numbers)
 	sort.Float64s(stats.Numbers)

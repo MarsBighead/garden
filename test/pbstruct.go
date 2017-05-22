@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	"garden/model"
+	"garden/marble/pbt"
 	"reflect"
 
 	"github.com/golang/protobuf/proto"
@@ -10,18 +10,18 @@ import (
 
 // PbtStruct protobuf test func
 func pbStruct() {
-	struct1 := &model.Test{
+	struct1 := &pbt.Test{
 		Label: proto.String("hello"),
 		Type:  proto.Int32(18),
 		Reps:  []int64{},
-		Optionalgroup: &model.Test_OptionalGroup{
+		Optionalgroup: &pbt.Test_OptionalGroup{
 			RequiredField: proto.String("good bye"),
 		},
 	}
-	struct2 := &model.Test2{
+	struct2 := &pbt.Test2{
 		Label: proto.String("hello"),
 		Reps:  []int64{},
-		Optionalgroup: &model.Test2_OptionalGroup{
+		Optionalgroup: &pbt.Test2_OptionalGroup{
 			RequiredField: proto.String("good bye"),
 		},
 	}

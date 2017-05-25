@@ -8,10 +8,17 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/BurntSushi/toml"
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type Service struct {
+// Config  configure file for application
+type Config struct {
+	Application string `toml:"application"`
+	Databases   struct {
+		MySQL string `toml:"mysql"`
+	} `toml:"databases"`
+	Directory string
 }
 
 func main() {
@@ -19,7 +26,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	db, err := config.GetDB(*dir)
+	db, err := config.ConnectMySQL(dir)
 	if err != nil {
 		panic(err.Error()) // Just for example purpose. You should use proper error handling instead of panic
 	}
@@ -43,10 +50,21 @@ func Databases() {
 		os.Exit(1)*/
 }
 
-func currentDirectory() (*string, error) {
-	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+func currentDirectory() (dir string, err error) {
+	dir, err = filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	return
+}
+
+func readConfig(dir string) (*Config, error) {
+	var cfg Config
+
+	_, err := toml.DecodeFile(dir+"/config.toml", &cfg)
 	if err != nil {
 		return nil, err
 	}
-	return &dir, nil
+	return &cfg, nil
 }

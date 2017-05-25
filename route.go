@@ -1,6 +1,7 @@
 package main
 
 import (
+	"garden/bio"
 	"garden/model"
 	"net/http"
 )
@@ -17,5 +18,6 @@ func route() {
 	http.HandleFunc("/statistics", model.AdvancedStatistic)
 	http.HandleFunc("/test/protocol", model.ProtocalHTTP)
 	http.HandleFunc("/tpl", model.HomeTemplate)
+	http.HandleFunc("/refgene", bio.JSONRefGene)
 	http.HandleFunc("/", model.Home)
 }

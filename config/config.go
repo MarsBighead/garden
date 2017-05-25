@@ -47,7 +47,8 @@ func GetConfig(dir string) Config {
 	return conf
 }
 
-func GetDB(dir string) (*sql.DB, error) {
+// ConnectMySQL connect mysql databases
+func ConnectMySQL(dir string) (*sql.DB, error) {
 	conf := GetConfig(dir).DB[0]
 	dbType, dbUser, dbName, Password := conf.DBType, conf.DBUser, conf.DBName, conf.Password
 

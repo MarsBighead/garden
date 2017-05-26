@@ -24,6 +24,7 @@ type Query struct {
 	End        int    `schema:"end"`
 	MinModes   int    `schema:"min_modes"`
 	MaxModes   int    `schema:"max_modes"`
+	ExonCount  int    `sechema:"exon_count"`
 }
 
 // CdsStat type of coding region enum
@@ -64,27 +65,28 @@ func Enum(m map[int32]string, v int32) string {
 
 // RowRefgene gene modes structure
 type RowRefgene struct {
-	ModeName     string `db:"name" json:"mode_name"`
-	Chromosome   string `db:"chrom" json:"chromosome"`
-	Strand       string `db:"strand"`
-	TxStart      int    `db:"txStart"`
-	TxEnd        int    `db:"txEnd"`
-	CdsStart     int    `db:"cdsStart"`
-	CdsEnd       int    `db:"cdsStart"`
-	ExonCount    int    `db:"exonCount"`
-	ExonStarts   []byte `db:"exonStarts"`
-	ExonEnds     []byte `db:"exonEnds"`
-	Score        int    `db:"score"`
-	Gene         string `db:"gene" json:"-"`
-	CdsStartStat string `db:"cdsStartStat"`
-	CdsEndStat   string `db:"cdsStartStat"`
-	ExonFrames   []byte `db:"exonFrames"`
+	ModeName     string `db:"name"            json:"mode_name"`
+	Chromosome   string `db:"chrom"           json:"chromosome"`
+	Strand       string `db:"strand"          json:"strand"`
+	TxStart      int    `db:"txStart"         json:"tx_start"`
+	TxEnd        int    `db:"txEnd"           json:"tx_end"`
+	CdsStart     int    `db:"cdsStart"        json:"-"`
+	CdsEnd       int    `db:"cdsStart"        json:"-"`
+	ExonCount    int    `db:"exonCount"       json:"exon_count"`
+	ExonStarts   []byte `db:"exonStarts"      json:"-"`
+	ExonEnds     []byte `db:"exonEnds"        json:"-"`
+	Score        int    `db:"score"           json:"score"`
+	Gene         string `db:"gene"            json:"gene"`
+	CdsStartStat string `db:"cdsStartStat"    json:"-"`
+	CdsEndStat   string `db:"cdsStartStat"    json:"-"`
+	ExonFrames   []byte `db:"exonFrames"      json:"-"`
 }
 
 // ResponseRefgene Gene structure
 type ResponseRefgene struct {
 	RowRefgene
-	ExonPos []*Exon `json:"exon_postion"`
+	ExonPos   []*Exon  `json:"exon_postion"`
+	ExonFrame []string `json:"exon_frame"`
 }
 
 // Exon exon position start to end

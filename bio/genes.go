@@ -53,9 +53,15 @@ func Hg38Refgene(w http.ResponseWriter, r *http.Request) {
 		v := &ResponseRefgene{
 			RowRefgene: RowRefgene{
 				ModeName:   gene.ModeName,
-				Gene:       gene.Gene,
 				Chromosome: gene.Chromosome,
+				Strand:     gene.Strand,
+				TxStart:    gene.TxStart,
+				TxEnd:      gene.TxEnd,
+				ExonCount:  gene.ExonCount,
+				Score:      gene.Score,
+				Gene:       gene.Gene,
 			},
+			ExonFrame: strings.Split(strings.TrimRight(string(gene.ExonFrames), ","), ","),
 		}
 		v.ExonPos = gene.getExonPos()
 		respGenes = append(respGenes, v)
@@ -69,12 +75,18 @@ func Hg38Refgene(w http.ResponseWriter, r *http.Request) {
 
 func (q *Query) refGeneSQL() (sql string) {
 	sql = fmt.Sprintf(`select name,
-							  name2 gene,
+							  chrom,
+							  strand,
+							  txStart,
+							  txEnd,
 							  cdsStart,
 							  cdsEnd,
+							  exonCount,
 							  exonStarts,
 							  exonEnds,
-							  chrom
+                              score,
+							  name2 gene,
+							  exonFrames 
 					   from hg38.refGene
 					   limit 1,5`)
 	return

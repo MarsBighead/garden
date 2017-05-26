@@ -8,11 +8,8 @@ import (
 	"garden/model"
 
 	"fmt"
-
 	"net/url"
-
 	"strconv"
-
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -30,9 +27,9 @@ type ModesByGene struct {
 
 // ModesResponse render modes response page
 type ModesResponse struct {
-	Modes         []*ModesByGene `json:"modes"`
 	Count         int            `json:"count"`
 	MaxModeNumber int            `json:"max_mode_number"`
+	Modes         []*ModesByGene `json:"modes"`
 }
 
 // QueryRefGene for query data parse

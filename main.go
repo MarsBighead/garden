@@ -32,7 +32,8 @@ func route() {
 	http.HandleFunc("/statistics", model.AdvancedStatistic)
 	http.HandleFunc("/test/protocol", model.ProtocalHTTP)
 	http.HandleFunc("/tpl", model.HomeTemplate)
-	http.HandleFunc("/hg38/refgene/modes", bio.PayloadHg38GeneModes)
+	http.HandleFunc("/hg38/refgene/modes", bio.PayloadHg38Modes)
+	http.HandleFunc("/hg38/refgene/gene", bio.PayloadHg38RefGene)
 	http.HandleFunc("/", model.Home)
 }
 

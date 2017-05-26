@@ -59,7 +59,6 @@ func queryModeParams(uv url.Values) (q *Query, err error) {
 }
 
 func (q *Query) geneModeSQL() (sql string) {
-	fmt.Printf("query parameters: %#v\n", q)
 	var havingConds, whereConds []string
 	if q.Chromosome != "" {
 		havingConds = append(havingConds, "chrom='"+q.Chromosome+"'")

@@ -7,12 +7,25 @@ import (
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 )
 
 func main() {
+	cfg, err := model.ReadConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+	db, err := sqlx.Open("mysql", cfg.Databases.MySQL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	service := Service{
+		DB:     db,
+		Config: cfg,
+	}
 	log.Printf("Garden is running now")
-	route()
-	err := http.ListenAndServe(":8001", nil) //设置监听的端口
+	service.route()
+	err = http.ListenAndServe(":8001", nil) //设置监听的端口
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
@@ -20,7 +33,13 @@ func main() {
 	select {}
 }
 
-func route() {
+// Service garden http service
+type Service struct {
+	DB     *sqlx.DB
+	Config *model.Config
+}
+
+func (s *Service) route() {
 	http.HandleFunc("/home", model.Home)
 	http.HandleFunc("/list", model.HomeList)
 	http.HandleFunc("/pbt", model.Pbt)

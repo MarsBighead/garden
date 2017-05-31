@@ -20,6 +20,7 @@ type ModesResponse struct {
 // Query Parse query refGene data struct
 type Query struct {
 	Chromosome string `schema:"chrom"`
+	Gene       string `schema:"gene"`
 	Start      int    `schema:"start"`
 	End        int    `schema:"end"`
 	MinModes   int    `schema:"min_modes"`

@@ -74,6 +74,20 @@ func Hg38Refgene(w http.ResponseWriter, r *http.Request) {
 }
 
 func (q *Query) refGeneSQL() (sql string) {
+	var whereConds []string
+	var where string
+	if q.Start != 0 {
+		whereConds = append(whereConds, "txStart>"+strconv.Itoa(q.Start))
+	}
+	if q.End != 0 {
+		whereConds = append(whereConds, "txEnd>"+strconv.Itoa(q.End))
+	}
+	if q.Gene != "" {
+		whereConds = append(whereConds, "name2='"+q.Gene+"'")
+	}
+	if len(whereConds) >= 1 {
+		where = "where " + strings.Join(whereConds, " and ")
+	}
 	sql = fmt.Sprintf(`select name,
 							  chrom,
 							  strand,
@@ -88,7 +102,8 @@ func (q *Query) refGeneSQL() (sql string) {
 							  name2 gene,
 							  exonFrames 
 					   from hg38.refGene
-					   limit 1,5`)
+                       %s`, where)
+	//limit 1,5`, where)
 	return
 }
 

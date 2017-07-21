@@ -53,9 +53,15 @@ func Hg38Refgene(w http.ResponseWriter, r *http.Request) {
 		v := &ResponseRefgene{
 			RowRefgene: RowRefgene{
 				ModeName:   gene.ModeName,
-				Gene:       gene.Gene,
 				Chromosome: gene.Chromosome,
+				Strand:     gene.Strand,
+				TxStart:    gene.TxStart,
+				TxEnd:      gene.TxEnd,
+				ExonCount:  gene.ExonCount,
+				Score:      gene.Score,
+				Gene:       gene.Gene,
 			},
+			ExonFrame: strings.Split(strings.TrimRight(string(gene.ExonFrames), ","), ","),
 		}
 		v.ExonPos = gene.getExonPos()
 		respGenes = append(respGenes, v)
@@ -68,15 +74,36 @@ func Hg38Refgene(w http.ResponseWriter, r *http.Request) {
 }
 
 func (q *Query) refGeneSQL() (sql string) {
+	var whereConds []string
+	var where string
+	if q.Start != 0 {
+		whereConds = append(whereConds, "txStart>"+strconv.Itoa(q.Start))
+	}
+	if q.End != 0 {
+		whereConds = append(whereConds, "txEnd>"+strconv.Itoa(q.End))
+	}
+	if q.Gene != "" {
+		whereConds = append(whereConds, "name2='"+q.Gene+"'")
+	}
+	if len(whereConds) >= 1 {
+		where = "where " + strings.Join(whereConds, " and ")
+	}
 	sql = fmt.Sprintf(`select name,
-							  name2 gene,
+							  chrom,
+							  strand,
+							  txStart,
+							  txEnd,
 							  cdsStart,
 							  cdsEnd,
+							  exonCount,
 							  exonStarts,
 							  exonEnds,
-							  chrom
+                              score,
+							  name2 gene,
+							  exonFrames 
 					   from hg38.refGene
-					   limit 1,5`)
+                       %s`, where)
+	//limit 1,5`, where)
 	return
 }
 

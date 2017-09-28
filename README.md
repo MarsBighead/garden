@@ -4,7 +4,12 @@
 
 - Manual
   1. Home page url:
-     /,/home,/index
-  2. Top path for test page:
+     ```
+     /
+     /home
+     /index
+     ```
+  2. Top test page path:
+     ```
      /test/
-     http protocol test page: /test/
+     ```

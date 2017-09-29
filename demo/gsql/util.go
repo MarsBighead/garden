@@ -12,6 +12,7 @@ func GetColumn(v interface{}) {
 	rtp := reflect.ValueOf(v).Type()
 	fmt.Printf("%#v\n", rtp)
 	fmt.Printf("num field is %#v\n", rtp.NumField())
+	fmt.Printf("Name of stuct: %v\n", reflect.TypeOf(v).Name())
 	fmt.Printf("kind: %v; slice %v, Ptr %v\n", rtp.Kind(), reflect.Slice, reflect.Ptr)
 	for rtp.Kind() == reflect.Slice || rtp.Kind() == reflect.Ptr {
 		fmt.Printf("kind: %v; slice %v, Ptr %v\n", rtp.Kind(), reflect.Slice, reflect.Ptr)

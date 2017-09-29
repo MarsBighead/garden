@@ -26,3 +26,13 @@ ORDER BY 1,2';
     return query EXECUTE query_tables;  
 end; 
 $$ LANGUAGE plpgsql;
+DROP FUNCTION tablenames();
+DROP TYPE tablename;
+CREATE TYPE tablename AS ("Name" name); 
+CREATE OR REPLACE FUNCTION tablenames() 
+RETURNS SETOF tablename 
+as $$
+BEGIN
+   return query EXECUTE 'SELECT "Table"  from showtables()';
+END; 
+$$ LANGUAGE plpgsql;

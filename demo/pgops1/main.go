@@ -35,13 +35,15 @@ func main() {
 	fmt.Printf("StartTime: %v\n", time.Now())
 
 	for i := 0; i < gophers; i++ {
+
 		go func(i int, sStmt string) {
 			defer wg.Done()
 			gopher(i, sStmt)
 			//fmt.Printf("Gopher is %d,\n%s\n", i, sStmt)
 		}(i, sStmt)
 		// spin up a gopher
-		//	go gopher(i, sStmt, wg)
+		// ~= 6.46s
+		//go gopher(i, sStmt)
 		//gopher(i, sStmt)
 	}
 

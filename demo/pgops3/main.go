@@ -26,6 +26,7 @@ const (
 func main() {
 
 	// create string to pass
+	// About 0.588s
 	fmt.Printf("StartTime: %v\n", time.Now())
 	var sStmt string = "insert into test (gopher_id, created) values "
 	gopher(sStmt)

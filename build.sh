@@ -8,9 +8,8 @@ docker rm build
 MBUILD_CID=$(docker create  -it \
 	-v $GOBIN:/go/bin \
 	-v $GOSRC:/go/src \
-	-v  $APP:/go/app \
 	--name build golang:1.8.3  \
-	/bin/bash )
+	/bin/bash /go/src/garden/app.sh )
 
 echo $MBUILD_CID
 docker start $MBUILD_CID

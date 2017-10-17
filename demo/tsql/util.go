@@ -7,10 +7,15 @@ import (
 	"strings"
 )
 
-//CreateSQLWithoutTablename Create sql from struct without tablename parameters
+//CreateSQLWithoutTablename Create sql from struct without parameter tablename
 func CreateSQLWithoutTablename(v interface{}) string {
 	tablename := reflect.ValueOf(v).Type().Name()
 	fmt.Println("table name is", tablename)
+	return create(v, tablename)
+}
+
+//CreateSQLWithTablename Create sql from struct with parameter tablename
+func CreateSQLWithTablename(v interface{}, tablename string) string {
 	return create(v, tablename)
 }
 

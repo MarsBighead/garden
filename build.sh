@@ -22,7 +22,7 @@ while [ -n "$1" ] ; do
     case "$1" in
         -a) APPLICATION=$2; shift 2;;
         -g) GOLANG=$2; shift 2 ;;
-        -v) echo "$0 $VERSION"; exit 0;;
+        -v) echo "Version $VERSION"; exit 0;;
         --) shift; break ;;
         *) echo "Parameter error"; usage ;;
     esac

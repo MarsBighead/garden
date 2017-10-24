@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
+cd /go/src/$1
+go build
 
-cd /go/src/garden
-go build 

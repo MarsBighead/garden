@@ -35,7 +35,6 @@ done
 echo "$APPLICATION $GOLANG"
 GOBIN=$GOPATH/bin
 GOSRC=$GOPATH/src
-APP="/go/src/$APPLICATION/app.sh"
 if cid=$(docker ps -a|grep -o -E "build$"); then
     echo "Docker container $cid is removing...."
     docker rm -f $cid
@@ -44,5 +43,5 @@ BUILD_CID=$(docker create  -it \
 	-v $GOBIN:/go/bin \
 	-v $GOSRC:/go/src \
 	--name build golang:$GOLANG  \
-	/bin/bash $APP )
+	/bin/bash  /go/bin/app.sh $APPLICATION)
 docker start $BUILD_CID

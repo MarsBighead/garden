@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"reflect"
 
 	"log"
 
@@ -32,6 +33,10 @@ func main() {
 		}
 	}*/
 	generalQuery(db)
+	x := "nihao"
+	v := reflect.ValueOf(&x).Elem()
+	v.SetString("Paul")
+	fmt.Println("X is ", v)
 }
 
 func generalQuery(db *sql.DB) {
@@ -40,6 +45,7 @@ func generalQuery(db *sql.DB) {
 		log.Fatal("Fetch data err ", err)
 	}
 	columns, _ := rows.Columns()
+	fmt.Println(columns)
 	scanArgs := make([]interface{}, len(columns))
 
 	for rows.Next() {

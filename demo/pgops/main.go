@@ -33,10 +33,21 @@ func main() {
 		}
 	}*/
 	generalQuery(db)
-	x := "nihao"
-	v := reflect.ValueOf(&x).Elem()
-	v.SetString("Paul")
+	x := &X{}
+	t := reflect.TypeOf(x)
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
+	v := reflect.New(t).Elem()
+	//v := reflect.ValueOf(&x).Elem()
+	v.Field(0).SetString("Paul")
+	v.Field(1).SetInt(24)
 	fmt.Println("X is ", v)
+}
+
+type X struct {
+	Name string
+	ID   int
 }
 
 func generalQuery(db *sql.DB) {

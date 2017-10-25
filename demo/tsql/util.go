@@ -81,8 +81,8 @@ func (fieldSQL *FieldOfSQL) attachTags(tagAttr map[string]string) {
 	if _, ok := tagAttr["TYPE"]; ok {
 		fieldSQL.Type = strings.ToUpper(tagAttr["TYPE"])
 	}
-	if _, ok := tagAttr["DEFAUL"]; ok {
-		fieldSQL.Default = tagAttr["DEFAUL"]
+	if _, ok := tagAttr["DEFAULT"]; ok {
+		fieldSQL.Default = tagAttr["DEFAULT"]
 	}
 }
 
@@ -106,4 +106,42 @@ func getTagAttribute(tags reflect.StructTag) map[string]string {
 		}
 	}
 	return attr
+}
+
+//SStmtInsert SQL Statement of insert
+func SStmtInsert(o interface{}) {
+	t := reflect.TypeOf(o)         //获取接口的类型
+	fmt.Println("Type:", t.Name()) //t.Name() 获取接口的名称
+
+	v := reflect.ValueOf(o) //获取接口的值类型
+	fmt.Println("Fields:")
+
+	for i := 0; i < t.NumField(); i++ { //NumField取出这个接口所有的字段数量
+		f := t.Field(i)                                         //取得结构体的第i个字段
+		val := v.Field(i).Interface()                           //取得字段的值
+		fmt.Printf("Field %6s: %v = %v\n", f.Name, f.Type, val) //第i个字段的名称,类型,值
+	}
+
+	for i := 0; i < t.NumMethod(); i++ {
+		m := t.Method(i)
+		fmt.Printf("%6s: %v\n", m.Name, m.Type) //获取方法的名称和类型
+	}
+}
+
+func isValueBlank(v reflect.Value) bool {
+	switch v.Kind() {
+	case reflect.String:
+		return v.Len() == 0
+	case reflect.Bool:
+		return !v.Bool()
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return v.Int() == 0
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return v.Uint() == 0
+	case reflect.Float32, reflect.Float64:
+		return v.Float() == 0
+	case reflect.Interface, reflect.Ptr:
+		return v.IsNil()
+	}
+	return reflect.DeepEqual(v.Interface(), reflect.Zero(v.Type()).Interface())
 }

@@ -44,7 +44,6 @@ func main() {
 	s.Field(0).SetString("Paul")
 	s.Field(1).SetInt(24)
 	fmt.Println("X is ", x)
-	RefectTest()
 }
 
 type X struct {
@@ -52,22 +51,17 @@ type X struct {
 	ID   int
 }
 
-type T struct {
-	Age      int
-	Name     string
-	Children []int
-}
-
-func RefectTest() {
-	t := T{12, "someone-life", nil}
-	s := reflect.ValueOf(&t).Elem()
-
-	s.Field(0).SetInt(123)                        // 内置常用类型的设值方法
-	sliceValue := reflect.ValueOf([]int{1, 2, 3}) // 这里将slice转成reflect.Value类型
-	s.FieldByName("Children").Set(sliceValue)
-	fmt.Println(t)
+func Bind(v interface{}) {
+	t := reflect.TypeOf(v)
+	if t.Kind() == reflect.Ptr {
+		s := reflect.ValueOf(v).Elem()
+		s.Field(0).SetInt(123)
+		sliceValue := reflect.ValueOf([]int{1, 2, 3})
+		s.FieldByName("Children").Set(sliceValue)
+	}
 
 }
+
 func generalQuery(db *sql.DB) {
 	rows, err := db.Query("SELECT * FROM test_b")
 	if err != nil {

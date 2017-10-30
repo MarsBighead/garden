@@ -1,6 +1,7 @@
 package bind
 
 import (
+	"fmt"
 	"testing"
 	"time"
 )
@@ -24,4 +25,7 @@ func TestBind(t *testing.T) {
 	Bind(t0)
 	t1 := new(To)
 	Bind(t1)
+	t2 := To{}
+	Bind(&t2)
+	fmt.Println(t2)
 }

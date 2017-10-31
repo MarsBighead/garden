@@ -29,3 +29,8 @@ func TestBind(t *testing.T) {
 	Bind(&t2)
 	fmt.Println(t2)
 }
+func TestSliceBind(t *testing.T) {
+	var ss []string
+	SliceBind(&ss)
+	fmt.Println(ss)
+}

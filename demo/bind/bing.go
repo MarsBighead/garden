@@ -8,6 +8,30 @@ import (
 	"github.com/lib/pq"
 )
 
+func SliceBind(value interface{}) {
+	v1 := reflect.ValueOf("paul1")
+	v2 := reflect.ValueOf("Duan")
+	t := reflect.TypeOf(value)
+	val := reflect.ValueOf(value).Elem()
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+		switch v := val; v.Kind() {
+		case reflect.Slice:
+			n := v.Len()
+			v.Set(reflect.Append(val, reflect.Zero(v.Type().Elem())))
+			fmt.Println("Input slice address", n)
+			if n == 1 {
+				v.Index(n).Set(v1)
+			} else if n == 2 {
+				v.Index(n).Set(v2)
+				return
+			}
+			SliceBind(value)
+		}
+	}
+
+}
+
 func Bind(v interface{}) {
 	t := reflect.TypeOf(v)
 	var s reflect.Value

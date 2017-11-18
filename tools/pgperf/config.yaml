@@ -1,0 +1,7 @@
+driver: postgres
+host: localhost 
+username: hbu
+password: hbu
+dbname: hbu 
+sslmode: disable 
+switch: on

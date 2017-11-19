@@ -8,6 +8,8 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
+	"net/http"
+	_ "net/http/pprof"
 	"os"
 	"regexp"
 	"strings"
@@ -21,6 +23,9 @@ import (
 var pms = []int{1, 200, 2000}
 
 func main() {
+	go func() {
+		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
 	ps := usage()
 	if len(os.Args) <= 1 {
 		ps = &params{

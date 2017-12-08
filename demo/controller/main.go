@@ -1,9 +1,11 @@
 package main
 
 import (
-	"github.com/voxelbrain/goptions"
+	"fmt"
 	"os"
 	"time"
+
+	"github.com/voxelbrain/goptions"
 )
 
 func main() {
@@ -26,4 +28,7 @@ func main() {
 		Timeout: 10 * time.Second,
 	}
 	goptions.ParseAndFail(&options)
+	fmt.Println(options.Servers, len(options.Servers))
 }
+
+//Example: go run main.go -s localhost -s 127.0.0.1

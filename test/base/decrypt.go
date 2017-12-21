@@ -1,4 +1,4 @@
-package main
+package base
 
 import (
 	"bytes"
@@ -10,7 +10,7 @@ import (
 )
 
 // http://www.cnblogs.com/lavin/p/5373188.html
-func main() {
+func Decrypt() {
 	/*
 	*src 要加密的字符串
 	*key 用来加密的密钥 密钥长度可以是128bit、192bit、256bit中的任意一个

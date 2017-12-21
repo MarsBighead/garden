@@ -1,4 +1,4 @@
-package main
+package goroutine
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func main() {
+func container() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	c := make(chan bool, 100000)
 	t := time.Tick(time.Second)
@@ -33,7 +33,6 @@ func watching() {
 }
 
 func worker(i int, c chan bool) {
-	//fmt.Println("worker", i)
 	time.Sleep(100 * time.Microsecond)
 	<-c
 }

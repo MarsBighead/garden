@@ -18,7 +18,7 @@ func (r Rectangle) area() float64 {
 func (c Circle) area() float64 {
 	return c.radius * c.radius * math.Pi
 }
-func tMethod() {
+func Area() {
 	r1 := Rectangle{12, 2}
 	r2 := Rectangle{9, 4}
 	c1 := Circle{10}

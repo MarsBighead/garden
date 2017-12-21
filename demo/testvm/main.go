@@ -35,6 +35,17 @@ func main() {
 	}
 	srv.pollFind(ctx)
 	srv.pollContainer(ctx)
+	c, err := NewClient(ctx, *srv)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer c.Logout(ctx)
+	ch := make(chan *govmomi.Client)
+	fmt.Println("By Xchan now is at", time.Now())
+	go srv.xchan(ctx, c, ch)
+	c = <-ch
+	fmt.Println("After Xchan c.ServiceContent.Abouts ", c.ServiceContent.About)
+	time.Sleep(2e9)
 
 }
 
@@ -128,6 +139,48 @@ func (srv *Server) pollFind(ctx context.Context) error {
 	}
 	fmt.Println("running time:", time.Now().Sub(now))
 	return nil
+}
+
+// xchan Load data to table Vm
+func (srv *Server) xchan(ctx context.Context, c *govmomi.Client, ch chan *govmomi.Client) {
+	now := time.Now()
+	fmt.Println("By Xchan length of vms is ", now)
+	ch <- c
+	// Retrieve summary property for all machines
+	// Reference: http://pubs.vmware.com/vsphere-60/topic/com.vmware.wssdk.apiref.doc/vim.VirtualMachine.html
+
+	m := view.NewManager(c.Client)
+	v, err := m.CreateContainerView(ctx, c.ServiceContent.RootFolder, nil, true)
+	if err != nil {
+		log.Println(err)
+	}
+	var vms []mo.VirtualMachine
+	err = v.Retrieve(ctx, []string{"VirtualMachine"}, []string{"summary"}, &vms)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("By Xchan length of vms is ", len(vms))
+	for _, vm := range vms {
+		pvmr := &PollVMRaw{
+			Moref: vm.Summary.Vm.Value,
+			Name:  vm.Summary.Config.Name,
+			//GuestOS: vm.Summary.Config.GuestFullName,
+			//GuestID: vm.Summary.Config.GuestId,
+			HostMoref:    vm.Summary.Runtime.Host.Value,
+			MemSizeMB:    vm.Summary.Config.MemorySizeMB,
+			ResMemSizeMB: vm.Summary.Config.MemoryReservation,
+			PowerState:   string(vm.Summary.Runtime.PowerState),
+			ConnectOn:    string(vm.Summary.Runtime.ConnectionState),
+			//IPAddress:     vm.Summary.Guest.IpAddress,
+			InstanceUUUID: vm.Summary.Config.InstanceUuid,
+			BiosUUID:      vm.Summary.Config.Uuid,
+			//BootTime:      vm.Summary.Runtime.BootTime,
+		}
+		fmt.Println("Poll", pvmr.Moref)
+
+	}
+	fmt.Println("running time:", time.Now().Sub(now))
+
 }
 
 // pollContainer Load data to table Vm

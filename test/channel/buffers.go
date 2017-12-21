@@ -1,8 +1,8 @@
-package main
+package channel
 
 import "fmt"
 
-func main() {
+func buffers() {
 	chs := make(chan int, 10)
 	go func() {
 		for i := 0; i < 10; i++ {

@@ -1,4 +1,4 @@
-package main
+package channel
 
 import (
 	"fmt"
@@ -7,16 +7,16 @@ import (
 	"time"
 )
 
-func main() {
+func control() {
 	threadNum := 4
-	length := 200
+	length := 20000000
 	start := time.Now()
 	chChan(threadNum, length)
 	sp1 := time.Now()
-	fmt.Println("type 1 duration", sp1.Sub(start))
+	fmt.Println("type 1:control by channel duration", sp1.Sub(start))
 	wgChan(threadNum, length)
 	sp2 := time.Now()
-	fmt.Println("type 2 duration", sp2.Sub(sp1))
+	fmt.Println("type 2:control by wg(WaitGroup)  duration", sp2.Sub(sp1))
 }
 
 func chChan(threadNum int, length int) {
@@ -48,6 +48,7 @@ func chChan(threadNum int, length int) {
 	}
 	fmt.Println("max goroutine is", maxG)
 }
+
 func wgChan(threadNum int, length int) {
 	var maxG int
 	threadKey := make(chan int, threadNum)

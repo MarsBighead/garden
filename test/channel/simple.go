@@ -1,11 +1,11 @@
-package main
+package channel
 
 import (
 	"fmt"
 	"time"
 )
 
-func main() {
+func simple() {
 	sizes := make(chan int64)
 	go func() {
 		sizes <- 128

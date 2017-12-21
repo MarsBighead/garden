@@ -1,4 +1,4 @@
-package main
+package channel
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func main() {
+func lock() {
 	sizes := make(chan int)
 	var wg sync.WaitGroup
 	wg.Add(1)

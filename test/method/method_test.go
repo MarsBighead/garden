@@ -2,6 +2,6 @@ package method
 
 import "testing"
 
-func TesttMethod(t *testing.T) {
-	tMethod()
+func TesttArea(t *testing.T) {
+	Area()
 }

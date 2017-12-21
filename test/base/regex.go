@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+//CheckPkgName check package name for Andriod or AppStore
 func CheckPkgName(pkgName, previewLink, os string) (string, int) {
 	var cntModify int
 	if os == "ios" {
@@ -52,7 +53,7 @@ func isHostCN(hostname string) bool {
 	return isCN
 }
 
-func R(uri string) {
+func currency(uri string) {
 	//uri := "http://cn.t.appcoachs.net/v3/win/WK7fQWfe/c3fe6b04298a11e789604fccf478c5c9/c7706fdc48f83c81feadf8d7f7076bd2aad8b72d?price=${AUCTION_PRICE}&currency=${AUCTION_CURRENCY}"
 	fmt.Printf("%v\n", uri)
 	//uri = regexp.MustCompile(`&currency=\${AUCTION_CURRENCY}|currency=\${AUCTION_CURRENCY}&`).ReplaceAllString(uri, "")

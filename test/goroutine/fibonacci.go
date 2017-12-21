@@ -1,17 +1,15 @@
-package main
+package goroutine
 
 import (
 	"fmt"
 	"time"
 )
 
-func main() {
-	fmt.Println("vim-go")
+func fibonacci() {
 	go spinner(100 * time.Millisecond)
 	const n = 45
 	fibN := fib(n)
 	fmt.Printf("\rFibonacci(%d) = %d\n", n, fibN)
-
 }
 
 func spinner(delay time.Duration) {
@@ -19,9 +17,7 @@ func spinner(delay time.Duration) {
 		for _, r := range `-\|/` {
 			fmt.Printf("\r%c", r)
 			time.Sleep(delay)
-
 		}
-
 	}
 }
 func fib(x int) int {

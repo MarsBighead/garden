@@ -15,4 +15,6 @@ func main() {
 	base.GotoLoop()
 	log.Println("Study golang class and instance operation methods...")
 	base.GoObject()
+	log.Println("Study golang class and instance operation methods...")
+	base.Decrypt()
 }

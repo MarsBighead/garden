@@ -1,4 +1,4 @@
-package main
+package method
 
 import (
 	"log"
@@ -6,7 +6,7 @@ import (
 	"github.com/robfig/cron"
 )
 
-func main() {
+func crontab() {
 	i := 0
 	c := cron.New()
 	spec := "*/5 * * * * ?"

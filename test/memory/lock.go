@@ -1,11 +1,13 @@
-package main
+package memory
 
 import (
 	"fmt"
+	"log"
 	"sync"
 )
 
-func main() {
+func lock() {
+	log.Println("Start test locked variable in different goroutines...")
 	var (
 		mu   sync.Mutex
 		x, y int

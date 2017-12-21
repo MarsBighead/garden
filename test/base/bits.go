@@ -92,7 +92,7 @@ func readerToBytes(reader io.Reader, size int) ([]byte, error) {
 	return data[:n], nil
 }
 
-// ReadåBytes Transfer data defined by io.Reader interface to type byte
+// ReadBytes Transfer data defined by io.Reader interface to type byte
 func ReadBytes() {
 	data := &S{"My name is Paul Duan"}
 	l := len(data.s)

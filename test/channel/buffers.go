@@ -26,17 +26,19 @@ func controller() {
 	limit := 3
 	origin := limit
 	ch := make(chan string, limit)
-	var gen int
-	for {
-		if gen == 0 {
-			go func() {
-				for i := 0; i < limit; i++ {
-					ch <- fmt.Sprintf("id %d", i)
-				}
-			}()
-			gen++
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < limit; i++ {
+			ch <- fmt.Sprintf("id %d", i)
 		}
-
+	}()
+	wg.Wait()
+	for {
+		if time.Now().Sub(start) > 28e9 {
+			break
+		}
 		if limit > origin {
 			tmp := make(chan string, limit)
 			extChanCap(ch, tmp)
@@ -46,7 +48,7 @@ func controller() {
 		}
 		go func(ch chan string) {
 			var control int
-			fmt.Printf("Channel capacity %d, generate flag: %v, re-cosumer: ", cap(ch), gen)
+			fmt.Printf("Channel capacity %d, re-cosumer: ", cap(ch))
 			for s := range ch {
 				fmt.Printf("%s ", s)
 				control++
@@ -58,15 +60,13 @@ func controller() {
 			fmt.Println()
 		}(ch)
 
-		time.Sleep(10 * time.Second)
-		if time.Now().Sub(start) > 3e10 && time.Now().Sub(start) <= 5e10 {
+		time.Sleep(4 * time.Second)
+		if time.Now().Sub(start) > 2e10 && time.Now().Sub(start) <= 28e9 {
 			fmt.Println(limit, "Continue from", start, "to", time.Now())
 			limit++
 			continue
 		}
-		if time.Now().Sub(start) > 5e10 {
-			break
-		}
+
 		fmt.Println(limit, "Duration from", start, "to", time.Now())
 
 	}

@@ -13,9 +13,9 @@ type Pkg struct {
 
 func TestR(t *testing.T) {
 	uri := "http://cn.t.appcoachs.net/v3/win/WK7fQWfe/c3fe6b04298a11e789604fccf478c5c9/c7706fdc48f83c81feadf8d7f7076bd2aad8b72d?price=${AUCTION_PRICE}&currency=${AUCTION_CURRENCY}"
-	R(uri)
+	currency(uri)
 	uri = "http://cn.t.appcoachs.net/v3/win/WK7fQWfe/c3fe6b04298a11e789604fccf478c5c9/c7706fdc48f83c81feadf8d7f7076bd2aad8b72d?currency=${AUCTION_CURRENCY}&price=${AUCTION_PRICE}"
-	R(uri)
+	currency(uri)
 }
 func TestCheckPkgName(t *testing.T) {
 	pkg := Pkg{

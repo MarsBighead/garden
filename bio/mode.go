@@ -1,8 +1,8 @@
 package bio
 
 import (
+	"database/sql"
 	"encoding/json"
-	"garden/model"
 	"log"
 
 	"fmt"
@@ -11,38 +11,22 @@ import (
 	"strconv"
 	"strings"
 
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/schema"
-	"github.com/jmoiron/sqlx"
 )
 
-//Hg38RefgeneModes  hg38 refGene count modes API
-func Hg38RefgeneModes(w http.ResponseWriter, r *http.Request) {
-	params := r.URL.Query()
-	q, err := queryModeParams(params)
+//Hg38RefgeneMode  hg38 refGene count modes API
+func (s *Service) Hg38RefgeneMode(w http.ResponseWriter, r *http.Request) {
+	q, err := parseQueryParams(r.URL.Query())
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
-	cfg, err := model.ReadConfig()
+	resp, err := q.queryRefGeneMode(s.DB)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
-	db, err := sqlx.Open("mysql", cfg.Databases.MySQL)
-	if err != nil {
-		log.Fatal(err)
-	}
-	var mbgs []*ModesByGene
-	sql := q.geneModeSQL()
-	db.Select(&mbgs, sql)
-	resp := ModesResponse{
-		Count:         len(mbgs),
-		MaxModeNumber: mbgs[0].ModeNumber,
-		Modes:         mbgs,
-	}
-
 	body, err := json.MarshalIndent(resp, "", "    ")
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	w.Write(body)
 }
@@ -52,13 +36,12 @@ func queryModeParams(uv url.Values) (q *Query, err error) {
 	dec := schema.NewDecoder()
 	dec.IgnoreUnknownKeys(true)
 	if err = dec.Decode(q, uv); err != nil {
-		log.Fatal(err)
 		return
 	}
 	return
 }
 
-func (q *Query) geneModeSQL() (sql string) {
+func (q *Query) queryRefGeneMode(db *sql.DB) (*ModesResponse, error) {
 	var havingConds, whereConds []string
 	if q.Chromosome != "" {
 		havingConds = append(havingConds, "chrom='"+q.Chromosome+"'")
@@ -85,13 +68,28 @@ func (q *Query) geneModeSQL() (sql string) {
 	if len(whereConds) >= 1 {
 		where = "where " + strings.Join(whereConds, " and ")
 	}
-	sql = fmt.Sprintf(` select count(name) mode_number, 
-	                               name2        gene, 
-							       chrom 
-							from hg38.refGene 
-                            %s
-							group by gene,chrom
-							%s
-							order by mode_number desc`, where, having)
-	return
+	sql := fmt.Sprintf(`select count(name) mode_number, name2 gene, chrom 
+		from hg38.refGene 
+        %s
+		group by gene, chrom
+		%s
+		order by mode_number desc`, where, having)
+	resp := new(ModesResponse)
+	rows, err := db.Query(sql)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		m := new(ModesByGene)
+		err = rows.Scan(&m.ModeNumber, &m.Gene, &m.Chromosome)
+		if err != nil {
+			return nil, err
+		}
+		resp.Modes = append(resp.Modes, m)
+		if m.ModeNumber > resp.MaxModeNumber {
+			resp.MaxModeNumber = m.ModeNumber
+		}
+	}
+	resp.Count = len(resp.Modes)
+	return resp, nil
 }

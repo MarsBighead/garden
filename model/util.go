@@ -37,3 +37,13 @@ func ReadConfig() (*Config, error) {
 	}
 	return &cfg, nil
 }
+
+//Parse config file to *Config
+func Parse(filename string) (*Config, error) {
+	cfg := new(Config)
+	_, err := toml.DecodeFile(filename, cfg)
+	if err != nil {
+		return nil, err
+	}
+	return cfg, nil
+}

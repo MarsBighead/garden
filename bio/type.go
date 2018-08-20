@@ -1,6 +1,14 @@
 package bio
 
-import "strconv"
+import (
+	"database/sql"
+	"strconv"
+)
+
+//Service for interactive with refGene in mysql
+type Service struct {
+	DB *sql.DB
+}
 
 // ModesByGene Count cut style mode group by gene
 // select count(name) cutmode, name2 gene from refGene group by gene having cutmode>7;
@@ -74,13 +82,13 @@ type RowRefgene struct {
 	CdsStart     int    `db:"cdsStart"        json:"-"`
 	CdsEnd       int    `db:"cdsStart"        json:"-"`
 	ExonCount    int    `db:"exonCount"       json:"exon_count"`
-	ExonStarts   []byte `db:"exonStarts"      json:"-"`
-	ExonEnds     []byte `db:"exonEnds"        json:"-"`
+	ExonStarts   string `db:"exonStarts"      json:"-"`
+	ExonEnds     string `db:"exonEnds"        json:"-"`
 	Score        int    `db:"score"           json:"score"`
 	Gene         string `db:"gene"            json:"gene"`
 	CdsStartStat string `db:"cdsStartStat"    json:"-"`
 	CdsEndStat   string `db:"cdsStartStat"    json:"-"`
-	ExonFrames   []byte `db:"exonFrames"      json:"-"`
+	ExonFrames   string `db:"exonFrames"      json:"-"`
 }
 
 // ResponseRefgene Gene structure

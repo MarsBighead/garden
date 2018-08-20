@@ -82,13 +82,13 @@ type RowRefgene struct {
 	CdsStart     int    `db:"cdsStart"        json:"-"`
 	CdsEnd       int    `db:"cdsStart"        json:"-"`
 	ExonCount    int    `db:"exonCount"       json:"exon_count"`
-	ExonStarts   string `db:"exonStarts"      json:"-"`
-	ExonEnds     string `db:"exonEnds"        json:"-"`
+	ExonStarts   []byte `db:"exonStarts"      json:"-"`
+	ExonEnds     []byte `db:"exonEnds"        json:"-"`
 	Score        int    `db:"score"           json:"score"`
 	Gene         string `db:"gene"            json:"gene"`
 	CdsStartStat string `db:"cdsStartStat"    json:"-"`
 	CdsEndStat   string `db:"cdsStartStat"    json:"-"`
-	ExonFrames   string `db:"exonFrames"      json:"-"`
+	ExonFrames   []byte `db:"exonFrames"      json:"-"`
 }
 
 // ResponseRefgene Gene structure

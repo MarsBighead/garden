@@ -58,29 +58,31 @@ func (q *Query) queryRefGene(db *sql.DB) ([]*ResponseRefgene, error) {
 	if len(whereConds) >= 1 {
 		where = "where " + strings.Join(whereConds, " and ")
 	}
+	if where == "" {
+		where = "limit 1,5"
+	}
 	sql := fmt.Sprintf(`select name, chrom, strand, txStart, txEnd,
 	cdsStart, cdsEnd, exonCount, exonStarts, exonEnds, 
 	score, name2 gene, exonFrames 
 	from hg38.refGene
-	%s
-	limit 1,5`, where)
+	%s`, where)
 	//`, where)
 	var resp []*ResponseRefgene
 	rows, err := db.Query(sql)
 	if err != nil {
 		return nil, err
 	}
-	print(sql)
 	for rows.Next() {
 		refGene := new(ResponseRefgene)
 		err = rows.Scan(&refGene.ModeName, &refGene.Chromosome, &refGene.Strand, &refGene.TxStart, &refGene.TxEnd,
-			&refGene.CdsStart, &refGene.CdsEnd, &refGene.ExonCount, &refGene.ExonStarts, &refGene.ExonCount,
+			&refGene.CdsStart, &refGene.CdsEnd, &refGene.ExonCount, &refGene.ExonStarts, &refGene.ExonEnds,
 			&refGene.Score, &refGene.Gene, &refGene.ExonFrames)
 		if err != nil {
 			return nil, err
 		}
-		//refGene.ExonPos = refGene.getExonPos()
-		//refGene.ExonFrame = strings.Split(strings.TrimRight(string(refGene.ExonFrames), ","), ",")
+		refGene.ExonPos = refGene.getExonPos()
+		refGene.ExonFrame = strings.Split(strings.TrimRight(string(refGene.ExonFrames), ","), ",")
+		resp = append(resp, refGene)
 
 	}
 	//	resp.Count = len(resp.Modes)

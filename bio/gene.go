@@ -83,6 +83,7 @@ func (q *Query) queryRefGene(db *sql.DB) ([]*ResponseRefgene, error) {
 		refGene.ExonPos = refGene.getExonPos()
 		refGene.ExonFrame = strings.Split(strings.TrimRight(string(refGene.ExonFrames), ","), ",")
 		resp = append(resp, refGene)
+		json.Marshal(refGene)
 
 	}
 	//	resp.Count = len(resp.Modes)

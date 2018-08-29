@@ -18,20 +18,25 @@ func main() {
 		defer wg.Done()
 		assign(ch, 200)
 	}()
+	var max int
 	for v := range ch {
 		limit <- true
 		wg.Add(1)
 		go func(v int) {
 			defer wg.Done()
 			time.Sleep(1 * time.Second)
-			log.Printf("Sequence %d, running goroutines number %d\n", v, runtime.NumGoroutine())
+			cnt := runtime.NumGoroutine()
+			if cnt > max {
+				max = cnt
+			}
+			log.Printf("Sequence %d, running goroutines number %d\n", v, cnt)
 			<-limit
 		}(v)
 	}
 	close(limit)
 	wg.Wait()
 	end := time.Now()
-	fmt.Printf("time cost is %v\n", end.Sub(start))
+	fmt.Printf("time cost is %v, max %d\n", end.Sub(start), max)
 }
 
 func assign(ch chan<- int, max int) {

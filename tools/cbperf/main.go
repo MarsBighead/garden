@@ -40,6 +40,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	s.QueryAllRefGene(bucket)
+	s.WriteBucket(bucket, 1000)
 
 }

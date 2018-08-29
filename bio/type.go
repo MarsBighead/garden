@@ -74,6 +74,7 @@ func Enum(m map[int32]string, v int32) string {
 
 // RowRefgene gene modes structure
 type RowRefgene struct {
+	DocKey       string `db:"-"               json:"docKey"`
 	ModeName     string `db:"name"            json:"mode_name"`
 	Chromosome   string `db:"chrom"           json:"chromosome"`
 	Strand       string `db:"strand"          json:"strand"`

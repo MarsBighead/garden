@@ -5,5 +5,5 @@ timeline = "timeline.garden.log"
 
 # databases
 [databases]
-mysql = "hbu:Mars1234@(127.0.0.1:3306)/hg38"
-#mysql = "root:vmware@(127.0.0.1:3306)/hg38"
+#mysql = "hbu:Mars1234@(127.0.0.1:3306)/hg38"
+mysql = "root:vmware@(127.0.0.1:3306)/hg38"

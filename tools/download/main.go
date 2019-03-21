@@ -16,9 +16,14 @@ import (
 	"github.com/tealeg/xlsx"
 )
 
+var regexpURI = regexp.MustCompile(`(\S+://)?(\S+\:\S+@)`)
+
 func main() {
 	filename := "/Users/duanp/config.xlsx"
-	parseData(filename)
+	filename = "http://user:pass@localhost:8080"
+	fmt.Printf("${1}: %s\n", regexpURI.ReplaceAllString(filename, "${1}"))
+	fmt.Printf("${2}: %s\n", regexpURI.ReplaceAllString(filename, "${2}"))
+	//parseData(filename)
 
 }
 

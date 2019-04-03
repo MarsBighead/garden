@@ -1,14 +1,69 @@
-package model
+package page
 
 import (
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"os"
 	"sort"
 	"strconv"
 	"strings"
 )
+
+//PageList list all handle in the page
+func (s *Service) PageList(w http.ResponseWriter, r *http.Request) {
+	log.Print("Running http handle model.HomeList!")
+	tpl, err := template.ParseFiles(s.Environment["TEMPLATE"] + "/list.htm")
+	if err != nil {
+		log.Fatal(err)
+	}
+	tpl.Execute(w, nil)
+}
+
+// PaddingTemplate  build web page with template from the set value
+func (s *Service) PaddingTemplate(w http.ResponseWriter, r *http.Request) {
+	zoro := Person{
+		Name:    "zoro",
+		Age:     27,
+		Emails:  []string{"dg@gmail.com", "dk@hotmail.com"},
+		Company: "Omron",
+		Role:    "SE"}
+
+	zoe := Person{
+		Name:   "zoe",
+		Age:    26,
+		Emails: []string{"test@gmail.com", "d@hotmail.com"}}
+
+	onlineUser := OnlineUser{User: []*Person{&zoro, &zoe}}
+
+	log.Print("Running http handle model.HomeTemplate!")
+
+	t, err := template.ParseFiles(s.Environment["TEMPLATE"] + "/template/tpl.htm")
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = t.Execute(w, onlineUser)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+// ProtocalHTTP method for test http protocal output in dashboard
+func ProtocalHTTP(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm() //Parse parameters, default none
+	fmt.Println(r.Form)
+	fmt.Println("User-Agent:", r.Header.Get("User-Agent"))
+	fmt.Println("HTTP scheme:", r.URL.Scheme)
+	// fmt.Println(r.Form["url_long"])
+	for k, v := range r.Form {
+		fmt.Println("key:", k)
+		fmt.Println("val:", strings.Join(v, ""))
+	}
+	var content = "Hello!\n" + "<a href=\"\">matrix API</a>"
+
+	w.Write([]byte(content)) //这个写入到w的是输出到客户端的
+}
 
 const (
 	pageTop = `<!DOCTYPE HTML><html><head>
@@ -25,9 +80,9 @@ const (
 )
 
 // AdvancedStatistic Advanced statistic with template http page
-func AdvancedStatistic(writer http.ResponseWriter, req *http.Request) {
+func (s *Service) AdvancedStatistic(writer http.ResponseWriter, req *http.Request) {
 	fmt.Printf("POST method is %s\n", req.Method)
-	tpl, err := template.ParseFiles(GetCurrentDir() + "/template/statistics.htm")
+	tpl, err := template.ParseFiles(s.Environment["TEMPLATE"] + "/statistics.htm")
 	checkError(err)
 	err = req.ParseForm() // Must be called before writing response
 	checkError(err)
@@ -47,6 +102,16 @@ func AdvancedStatistic(writer http.ResponseWriter, req *http.Request) {
 			err = tpl.Execute(writer, stats)
 		}
 	}
+}
+
+// Statistic struct for handler statistic
+type Statistic struct {
+	Numbers []float64
+	Count   int
+	Mean    float64
+	Median  float64
+	ErrMsg  string
+	Get     bool
 }
 
 // HomeStatistic Statistic number

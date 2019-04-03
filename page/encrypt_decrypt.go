@@ -1,4 +1,4 @@
-package model
+package page
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 //AES list all handle in the top path
 func AES(w http.ResponseWriter, r *http.Request) {
 	log.Print("Running http handle model.AES!")
-	tpl, err := template.ParseFiles(GetCurrentDir() + "/template/aes.htm")
+	tpl, err := template.ParseFiles("/template/aes.htm")
 	if err != nil {
 		log.Fatal(err)
 	}

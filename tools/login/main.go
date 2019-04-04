@@ -285,6 +285,4 @@ func main() {
 	res4 := getUrlRespHtml(lastUrl, postDict)
 	println(res4)
 
-	//判断err_no=0为登录成功！其他代码可参考：https://bbs.125.la/thread-13881883-1-2.html
-
 }

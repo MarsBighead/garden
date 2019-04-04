@@ -1,6 +1,6 @@
 # Garden
 
-[Garden](https://github.com/MarsBighead/garden) is a Golang practice proeject from [MarsBighead](https://github.com/MarsBighead)
+[Garden](https://github.com/MarsBighead/garden) is a Golang practice project from [MarsBighead](https://github.com/MarsBighead)
 
 ## handler with Server HTTP
 
@@ -15,7 +15,7 @@
 - API URL list
 
 ```shell
-     /test/
+     /list
 ```
 
 ## Updates

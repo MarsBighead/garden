@@ -5,15 +5,15 @@ import (
 	"testing"
 )
 
-type T struct {
+type Person struct {
 	Age      int
 	Name     string
 	Children []int
 }
 
 func TestBind(t *testing.T) {
-	s := new(T)
-	Bind(s)
-	fmt.Println("test struct is ", s)
+	p := new(Person)
+	bind(p)
+	fmt.Println("test struct is ", p)
 
 }

@@ -1,4 +1,4 @@
-package main
+package parse
 
 import (
 	"fmt"
@@ -24,7 +24,7 @@ type T struct {
 	}
 }
 
-func main() {
+func parseYAML() {
 	t := T{}
 	//把yaml形式的字符串解析成struct类型
 	err := yaml.Unmarshal([]byte(data), &t)

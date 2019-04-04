@@ -10,7 +10,7 @@ import (
 )
 
 //EncryptAES  AES-128  length of key: 16, 24, 32 bytes is mapping AES-128, AES-192, AES-256
-func EncryptAES(src string) (based string) {
+func EncryptAES(src string) (based string, err error) {
 	//Initial []byte token
 	token, err := hex.DecodeString("46356afe55fa3cea9cbe73ad442cad47")
 	if err != nil {

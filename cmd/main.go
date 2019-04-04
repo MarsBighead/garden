@@ -34,6 +34,7 @@ func main() {
 			"HOME":     path.Clean(dir + "/../"),
 			"TEMPLATE": path.Clean(dir + "/../template"),
 			"DATA":     path.Clean(dir + "/../data"),
+			"STATIC":   path.Clean(dir + "/../static"),
 		},
 	}
 	log.Printf("Garden is running now")

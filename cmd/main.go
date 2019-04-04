@@ -40,6 +40,7 @@ func main() {
 	ps := page.NewService(r, db)
 	http.HandleFunc("/home", ps.HomePage)
 	http.HandleFunc("/index", ps.HomePage)
+	http.HandleFunc("/list", ps.PageList)
 	http.HandleFunc("/", ps.HomePage)
 	log.Printf("Running Server on http://localhost:8001")
 	err = http.ListenAndServe(":8001", nil) //设置监听的端口

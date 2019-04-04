@@ -8,7 +8,7 @@ import (
 
 // HomePage  home/index web page
 func (s *Service) HomePage(w http.ResponseWriter, r *http.Request) {
-	log.Printf("Template directory: %s\n", s.Environment["TEMPLATE"])
+	log.Printf("Entry pattern URL: %s\n", r.URL.Path)
 
 	tpl, err := template.ParseFiles(s.Environment["TEMPLATE"] + "/home.htm")
 	if err != nil {

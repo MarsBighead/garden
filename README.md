@@ -1,17 +1,23 @@
 # Garden
 
-- Golang practice
+[Garden](https://github.com/MarsBighead/garden) is a Golang practice proeject from [MarsBighead](https://github.com/MarsBighead)
 
-*Golang applcication runs in web method.
+## handler with Server HTTP
 
-- Manual
-  1. Home page url:
-     ```shell
+- Home page URL
+
+```shell
      /
      /home
      /index
-     ```
-  2. Top test page path:
-     ```shell
+```
+
+- API URL list
+
+```shell
      /test/
-     ```
+```
+
+## Updates
+
+- April 3rd, 2019, Refactor to make the code clean and meanful.

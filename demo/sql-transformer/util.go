@@ -1,4 +1,4 @@
-package gsql
+package transformer
 
 import (
 	"fmt"

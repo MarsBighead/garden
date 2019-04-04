@@ -27,7 +27,7 @@ func AES(w http.ResponseWriter, r *http.Request) {
 		}
 		if slice, found := r.Form["Val"]; found && len(slice) > 0 {
 			src := slice[0]
-			crypted := aes.EncryptAES(src)
+			crypted, _ := aes.EncryptAES(src)
 			fmt.Printf("slice %v, found %v\n", src, crypted)
 		}
 	}

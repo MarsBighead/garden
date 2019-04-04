@@ -1,9 +1,11 @@
 package garden
 
+import "net/http"
+
 // Input items for garden server
 type Input interface {
-	GetOperationType() string
+	Category() string
 	Description() string
-	Router() string
-	Transform()
+	AddEnv(map[string]string)
+	http.Handler
 }

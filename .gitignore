@@ -27,3 +27,9 @@ _testmain.go
 tools/refgene/refgene
 tools/cbperf/cbperf
 *.json
+
+
+.DS_Store
+*.docx
+*.doc
+*.txt

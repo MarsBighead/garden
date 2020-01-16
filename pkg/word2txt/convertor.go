@@ -52,7 +52,7 @@ func (c *Converter) Output() error {
 	} else {
 		for _, p := range c.Content {
 			br.WriteString(p)
-			br.WriteString("\r")
+			br.WriteString("\r\n")
 		}
 	}
 

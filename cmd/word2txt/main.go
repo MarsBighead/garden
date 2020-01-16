@@ -28,36 +28,45 @@ Error input tolerance 3 times.
 		if n >= 5 {
 			break
 		}
-
-		fmt.Println(`
-Start a new compute with pressing Enter key or exit with q.`)
+		fmt.Printf(`Input your file/folder path or exit with q: `)
 		fmt.Scanln(&ss)
-		fmt.Println("input content is", ss)
 		if ss == "" {
 			continue
 		} else {
 			if strings.ToLower(ss) == "q" || strings.ToLower(ss) == "exit" {
 				sig = true
 			} else {
-				fmt.Println(`System is exiting in 10 seconds...`)
-				select {
-				case <-time.After(10 * time.Second):
-					sig = true
+				if isExistPath(ss) {
+					err := execute(ss)
+					if err != nil {
+						log.Println(err)
+						n++
+						continue
+					}
+
+				} else {
+					fmt.Println(`Invaild file path input, system will exit in 10 seconds...`)
+					select {
+					case <-time.After(10 * time.Second):
+						sig = true
+					}
 				}
 			}
-		}
-		err := execute()
-		if err != nil {
-			log.Println(err)
-			n++
-			continue
 		}
 	}
 	log.Println(`Exit.`)
 
 }
 
-func execute() error {
+func isExistPath(path string) bool {
+	_, err := os.Stat(path)
+	if err != nil && err.Error() == os.ErrNotExist.Error() {
+		return false
+	}
+	return true
+}
+
+func execute(pathname string) error {
 	//c := new(word2txt.Converter)
 	//c.Filename = "document.docx"
 	//c.Extract()
@@ -65,33 +74,25 @@ func execute() error {
 	if runtime.GOOS == "windows" {
 		isWindows = true
 	}
-	fmt.Println(`Please input you file or file folder`)
-	var pathname string
-	fmt.Scanln(&pathname)
-	stats, err := os.Stat(pathname)
-	if err != nil {
-		if !os.IsExist(err) {
-			log.Println("Invaild file path")
-			return err
-		}
-	}
+	stats, _ := os.Stat(pathname)
 	if stats.IsDir() {
+		fmt.Println(pathname)
 		files, err := ioutil.ReadDir(pathname)
 		if err != nil {
 			return err
 		}
 		absPathname, _ := filepath.Abs(pathname)
-		fmt.Println("abs", absPathname)
+		fmt.Println("abs path ", absPathname)
 		for _, f := range files {
-			fmt.Println(f.Name())
 			filename := absPathname + "/" + f.Name()
 			dst, ok := isWord(filename)
 			if ok {
+				fmt.Println(filename)
 				c := &word2txt.Converter{
 					Dst:       dst,
 					IsWindows: isWindows,
 				}
-				err = c.Extract(pathname)
+				err = c.Extract(filename)
 				if err != nil {
 					return err
 				}
@@ -102,7 +103,6 @@ func execute() error {
 
 			}
 		}
-
 	} else {
 		dst, ok := isWord(pathname)
 		if ok {
@@ -110,7 +110,7 @@ func execute() error {
 				Dst:       dst,
 				IsWindows: isWindows,
 			}
-			err = c.Extract(pathname)
+			err := c.Extract(pathname)
 			if err != nil {
 				return err
 			}

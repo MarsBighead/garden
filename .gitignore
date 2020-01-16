@@ -24,6 +24,8 @@ _testmain.go
 *.test
 *.prof
 
+*.tar.gz
+
 tools/refgene/refgene
 tools/cbperf/cbperf
 *.json
@@ -33,3 +35,4 @@ tools/cbperf/cbperf
 *.docx
 *.doc
 *.txt
+cmd/word2txt/word2txt

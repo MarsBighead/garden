@@ -26,9 +26,12 @@ make PREFIX=%{_prefix} %{?_smp_mflags}
 %install
 make PREFIX=%{_prefix} install DESTDIR=%{?buildroot}
 
+%preun
+
 
 %files
 %{_bindir}/helloworld
 
 %clean
 rm -rf %{buildroot}
+rm -rf %{buildrootdir}

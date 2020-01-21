@@ -1,7 +1,8 @@
 # macros
-%_topdir    %{getenv:HOME}/rpmbuild
-%_sourcedir %{_topdir}/SOURCES
-%_builddir  %{_topdir}/BUILD
-%_specdir   %{_topdir}/SPECS
-%_rpmdir    %{_topdir}/RPMS
-%_srcrpmdir %{_topdir}/SRPMS
+%_topdir        %{getenv:HOME}/rpmbuild
+%_sourcedir     %{_topdir}/SOURCES
+%_builddir      %{_topdir}/BUILD
+%_specdir       %{_topdir}/SPECS
+%_rpmdir        %{_topdir}/RPMS
+%_srcrpmdir     %{_topdir}/SRPMS
+ %_buildrootdir %{_topdir}/BUILDROOT

@@ -1,6 +1,8 @@
 package garden
 
-import "net/http"
+import (
+	"net/http"
+)
 
 // Input items for garden server
 type Input interface {

@@ -1,6 +1,8 @@
 package model
 
 import (
+	"fmt"
+
 	"github.com/BurntSushi/toml"
 )
 
@@ -21,4 +23,30 @@ func Parse(path string) (*Config, error) {
 		return nil, err
 	}
 	return cfg, nil
+}
+
+// Pointor Test data struct
+type Pointor struct {
+	num int
+}
+
+func (p *Pointor) get() int {
+	fmt.Println("Get value")
+	return p.num
+}
+func (p *Pointor) put(val int) {
+	fmt.Println("Put value")
+	p.num = val
+}
+
+// Assigner test interface usage method
+type Assigner interface {
+	get() int
+	put(int)
+}
+
+func assign(p Assigner) {
+	fmt.Println(p.get())
+	p.put(1)
+	fmt.Println(p.get())
 }

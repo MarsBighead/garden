@@ -29,6 +29,7 @@ func main() {
 	db.Ping()
 
 	//fmt.Printf("%#v\n", env)
+	dir = dir + "/.."
 	r := &garden.Router{
 		Environment: map[string]string{
 			"HOME":     path.Clean(dir + "/../"),
@@ -36,6 +37,7 @@ func main() {
 			"DATA":     path.Clean(dir + "/../data"),
 		},
 	}
+
 	log.Printf("Garden is running now")
 	ps := page.NewService(r, db)
 	http.HandleFunc("/home", ps.HomePage)

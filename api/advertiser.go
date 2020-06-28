@@ -2,13 +2,17 @@ package api
 
 import (
 	"garden"
+	"io/ioutil"
+	"net/http"
 )
 
+//Advertiser will show a advertiser via http json API form t HTTP Server
 type Advertiser struct {
-	Directory []string
+	Pattern     string
+	Environment map[string]string
 }
 
-func (a *Advertiser) GetOperationType() string {
+func (a *Advertiser) Category() string {
 	return "API"
 }
 
@@ -16,15 +20,24 @@ func (a *Advertiser) Description() string {
 	return `a mock advertiser list`
 }
 
-func (a *Advertiser) Router() string {
-	return `/api/json/advertiver`
+func (a *Advertiser) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadFile(a.Environment["DATA"] + "/ad-mock.json")
+	if err != nil {
+		panic(err)
+	}
+	_, err = w.Write(body)
+	if err != nil {
+		panic(err)
+	}
 }
 
-func (a *Advertiser) Transform() {
-
+//AddEnv add environment variables to the object
+func (a *Advertiser) AddEnv(env map[string]string) {
+	a.Environment = env
 }
+
 func init() {
-	Add("advertiser.go", func() garden.Input {
+	garden.Add("advertiser", func() garden.Input {
 		return &Advertiser{}
 	})
 }

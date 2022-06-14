@@ -1,16 +1,14 @@
 package main
 
 import (
-	"garden"
-	"garden/model"
-	"garden/page"
+	"garden/config"
+	"garden/pkg/router"
+	_ "garden/pkg/router/all"
 	"log"
-	"net/http"
 	"os"
-	"path"
 
+	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jmoiron/sqlx"
 )
 
 func main() {
@@ -18,36 +16,40 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	cfg, err := model.Parse(dir + "/config.toml")
+	env, err := config.GetEnvironment(dir + "/config.yml")
 	if err != nil {
 		log.Fatal(err)
 	}
-	db, err := sqlx.Open("mysql", cfg.Databases.MySQL)
-	if err != nil {
-		log.Fatal(err)
+	/*
+		if env.Database != nil {
+			db, err := sqlx.Open("mysql", cfg.Databases.MySQL)
+			if err != nil {
+				log.Fatal(err)
+			}
+			db.Ping()
+		}
+	*/
+	log.Printf("Garden is running with verison %s.", env.Version)
+	r := gin.Default()
+	act, ok := router.Routers["/albums"]
+	if !ok {
+		log.Fatal("Undefined but requested input: ablums")
 	}
-	db.Ping()
+	r.GET("/albums/:id", act().Get)
+	r.POST("/albums", act().Post)
 
-	//fmt.Printf("%#v\n", env)
-	dir = dir + "/.."
-	r := &garden.Router{
-		Environment: map[string]string{
-			"HOME":     path.Clean(dir + "/../"),
-			"TEMPLATE": path.Clean(dir + "/../template"),
-			"DATA":     path.Clean(dir + "/../data"),
-		},
-	}
-
-	log.Printf("Garden is running now")
-	ps := page.NewService(r, db)
-	http.HandleFunc("/home", ps.HomePage)
-	http.HandleFunc("/index", ps.HomePage)
-	http.HandleFunc("/list", ps.PageList)
-	http.HandleFunc("/", ps.HomePage)
-	log.Printf("Running Server on http://localhost:8001")
-	err = http.ListenAndServe(":8001", nil) //设置监听的端口
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
-	select {}
+	r.Run("localhost:8080")
+	/*
+		ps := page.NewService(r, db)
+		http.HandleFunc("/home", ps.HomePage)
+		http.HandleFunc("/index", ps.HomePage)
+		http.HandleFunc("/list", ps.PageList)
+		http.HandleFunc("/", ps.HomePage)
+		log.Printf("Running Server on http://localhost:8001")
+		err = http.ListenAndServe(":8001", nil) //设置监听的端口
+		if err != nil {
+			log.Fatal("ListenAndServe: ", err)
+		}
+		select {}
+	*/
 }

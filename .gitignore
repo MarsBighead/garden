@@ -30,9 +30,12 @@ tools/refgene/refgene
 tools/cbperf/cbperf
 *.json
 
-
+.vscode
 .DS_Store
 *.docx
 *.doc
 *.txt
 cmd/word2txt/word2txt
+
+coverage.html
+covprofile

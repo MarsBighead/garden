@@ -1,8 +1,10 @@
 package config
 
 import (
+	"context"
 	"database/sql"
 	"encoding/xml"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -13,10 +15,11 @@ import (
 )
 
 type Config struct {
-	XMLName     xml.Name   `xml:"config"`
-	Version     string     `xml:"version,attr"`
-	DB          []Database `xml:"databases"`
-	Description string     `xml:",innerxml"`
+	Version     string `json:"version" yaml:"version"`
+	Description string `json:"description" yaml:"description"`
+	configFile  string
+	flagSet     *flag.FlagSet
+	db          []Database
 }
 
 type Database struct {
@@ -25,6 +28,14 @@ type Database struct {
 	DBName   string   `xml:"dbName"`
 	DBUser   string   `xml:"dbUser"`
 	Password string   `xml:"password"`
+}
+
+func NewConfig(ctx context.Context) *Config {
+	cfg := &Config{}
+	cfg.flagSet = flag.NewFlagSet("garden", flag.ContinueOnError)
+	fs := cfg.flagSet
+	fs.StringVar(&cfg.configFile, "config", "config.yml", "config file, support format YAML, Json")
+	return cfg
 }
 
 func GetConfig(dir string) Config {
@@ -49,7 +60,7 @@ func GetConfig(dir string) Config {
 
 // ConnectMySQL connect mysql databases
 func ConnectMySQL(dir string) (*sql.DB, error) {
-	conf := GetConfig(dir).DB[0]
+	conf := GetConfig(dir).db[0]
 	dbType, dbUser, dbName, Password := conf.DBType, conf.DBUser, conf.DBName, conf.Password
 
 	db, err := sql.Open(dbType, dbUser+":"+Password+"@/"+dbName)

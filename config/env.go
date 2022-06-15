@@ -33,7 +33,8 @@ type database struct {
 	Port           int    `json:"port"`
 }
 
-func GetEnvironment(conf string) (*Environment, error) {
+func (cfg *Config) NewEnvironment() (*Environment, error) {
+	conf := cfg.configFile
 	file, err := os.Open(conf) // For read access.
 	if err != nil {
 		return nil, err

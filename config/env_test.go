@@ -9,14 +9,19 @@ import (
 
 func TestDynamicOptionChange(t *testing.T) {
 	re := require.New(t)
-	env, err := GetEnvironment("")
+	cfg := &Config{configFile: ""}
+	env, err := cfg.NewEnvironment()
 	re.NotNil(t, err)
-	env, err = GetEnvironment("config.yml")
+	cfg.configFile = "config.yml"
+	env, err = cfg.NewEnvironment()
 	re.NotNil(t, err)
-	env, err = GetEnvironment("config.yaml")
+	cfg.configFile = "config.yaml"
+	env, err = cfg.NewEnvironment()
 	re.Equal(env.Version, "v2.0.1")
-	env, err = GetEnvironment("config.json")
+	cfg.configFile = "config.json"
+	env, err = cfg.NewEnvironment()
 	re.Equal(env.Version, "")
-	_, err = GetEnvironment("env.go")
+	cfg.configFile = "config.go"
+	_, err = cfg.NewEnvironment()
 	re.EqualError(err, "Unsupport file format.")
 }

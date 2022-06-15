@@ -1,6 +1,7 @@
 package album
 
 import (
+	"garden/config"
 	"garden/pkg/router"
 	"net/http"
 
@@ -16,7 +17,8 @@ type album struct {
 }
 
 type Album struct {
-	Data []album
+	Data        []album
+	Environment *config.Environment
 }
 
 // getAlbumByID locates the album whose ID value matches the id
@@ -55,9 +57,10 @@ func init() {
 		{ID: "2", Title: "Jeru", Artist: "Gerry Mulligan", Price: 17.99},
 		{ID: "3", Title: "Sarah Vaughan and Clifford Brown", Artist: "Sarah Vaughan", Price: 39.99},
 	}
-	router.Add("/albums", func() router.Act {
+	router.Add("/albums", func(env *config.Environment) router.Act {
 		return &Album{
-			Data: albums,
+			Data:        albums,
+			Environment: env,
 		}
 	})
 }

@@ -1,13 +1,17 @@
 package router
 
-import "github.com/gin-gonic/gin"
+import (
+	"garden/config"
+
+	"github.com/gin-gonic/gin"
+)
 
 type Act interface {
 	Post(c *gin.Context)
 	Get(c *gin.Context)
 }
 
-type Router func() Act
+type Router func(env *config.Environment) Act
 
 var Routers = map[string]Router{}
 

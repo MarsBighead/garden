@@ -32,6 +32,7 @@ func main() {
 	r := gin.Default()
 	urls := []string{
 		"/albums",
+		"/pb",
 		"/advertiser",
 	}
 	for _, uri := range urls {
